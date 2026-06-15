@@ -1,0 +1,1459 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>全球宏观雷达 · data.hiwd.com</title>
+  <meta name="description" content="实时追踪美股三大股指、VIX 恐慌指数与美国十年期国债收益率——为跨境投资者提供一眼可读的宏观红绿灯。" />
+
+  <!-- Preconnect for performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    /* =====================================================
+       TOKENS & RESET
+       ===================================================== */
+    :root {
+      --bg-0:         #05070f;
+      --bg-1:         #080c18;
+      --bg-card:      #0c1121;
+      --bg-card-h:    #101726;
+      --border:       rgba(255,255,255,0.065);
+      --border-h:     rgba(255,255,255,0.12);
+      --t1:           #eef2ff;
+      --t2:           #7d8fb3;
+      --t3:           #3c4b65;
+      --green:        #00d09c;
+      --green-bg:     rgba(0,208,156,0.08);
+      --green-bd:     rgba(0,208,156,0.22);
+      --red:          #f23645;
+      --red-bg:       rgba(242,54,69,0.08);
+      --red-bd:       rgba(242,54,69,0.22);
+      --blue:         #3b82f6;
+      --blue-bg:      rgba(59,130,246,0.08);
+      --blue-bd:      rgba(59,130,246,0.18);
+      --amber:        #f59e0b;
+      --violet:       #818cf8;
+      --teal:         #2dd4bf;
+      --r:            14px;
+      --r-sm:         7px;
+      --nav-h:        60px;
+      --max-w:        1380px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg-0);
+      color: var(--t1);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Subtle dot-grid background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: radial-gradient(rgba(255,255,255,0.028) 1px, transparent 1px);
+      background-size: 36px 36px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Everything above the dot-grid */
+    .nav, .ticker-wrap, .page-header, .main-content, .section-b, .site-footer {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* =====================================================
+       NAVIGATION
+       ===================================================== */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      height: var(--nav-h);
+      border-bottom: 1px solid var(--border);
+      background: rgba(5,7,15,0.88);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+    }
+
+    .nav-inner {
+      max-width: var(--max-w);
+      height: 100%;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+    .nav-logo-text {
+      font-size: 1rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--t1);
+    }
+    .nav-logo-dot { color: var(--blue); }
+    .nav-logo-pill {
+      margin-left: 0.55rem;
+      padding: 2px 7px;
+      background: var(--blue-bg);
+      border: 1px solid var(--blue-bd);
+      border-radius: 4px;
+      font-size: 0.62rem;
+      font-weight: 700;
+      color: var(--blue);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.15rem;
+      list-style: none;
+    }
+    .nav-links a {
+      padding: 5px 13px;
+      border-radius: var(--r-sm);
+      font-size: 0.81rem;
+      font-weight: 500;
+      color: var(--t2);
+      text-decoration: none;
+      transition: color .15s, background .15s;
+      white-space: nowrap;
+    }
+    .nav-links a:hover      { color: var(--t1); background: rgba(255,255,255,0.05); }
+    .nav-links a.nav-active { color: var(--t1); background: var(--blue-bg); }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-shrink: 0;
+    }
+    .nav-clock {
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: var(--t3);
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.02em;
+    }
+    .nav-clock .clock-label { color: var(--t3); }
+    .nav-clock .clock-val   { color: var(--t2); }
+
+    /* =====================================================
+       TICKER TAPE WIDGET BAR
+       ===================================================== */
+    .ticker-wrap {
+      border-bottom: 1px solid var(--border);
+      background: var(--bg-1);
+      overflow: hidden;
+    }
+
+    /* =====================================================
+       PAGE HEADER
+       ===================================================== */
+    .page-header {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 3rem 2rem 2.25rem;
+    }
+
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.76rem;
+      color: var(--t3);
+    }
+    .breadcrumb a {
+      color: var(--t3);
+      text-decoration: none;
+      transition: color .15s;
+    }
+    .breadcrumb a:hover   { color: var(--t2); }
+    .breadcrumb .sep      { opacity: .45; font-size: .7em; }
+    .breadcrumb .bc-cur   { color: var(--t2); }
+
+    .header-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .header-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      margin-bottom: 0.75rem;
+      padding: 3px 9px;
+      background: var(--blue-bg);
+      border: 1px solid var(--blue-bd);
+      border-radius: 4px;
+      font-size: 0.64rem;
+      font-weight: 700;
+      color: var(--blue);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .eyebrow-dot {
+      width: 5px;
+      height: 5px;
+      background: var(--blue);
+      border-radius: 50%;
+      animation: blink-blue 2.8s ease-in-out infinite;
+    }
+    @keyframes blink-blue {
+      0%,100% { opacity:1; } 50% { opacity:.25; }
+    }
+
+    .header-title {
+      font-size: 2.6rem;
+      font-weight: 800;
+      letter-spacing: -.045em;
+      line-height: 1.05;
+      color: var(--t1);
+    }
+    .header-title-en {
+      display: block;
+      margin-top: .3rem;
+      font-size: .92rem;
+      font-weight: 400;
+      letter-spacing: .03em;
+      color: var(--t3);
+    }
+
+    /* Market status */
+    .header-meta {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: .55rem;
+      padding-top: .4rem;
+    }
+    .mkt-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      padding: 6px 13px;
+      border-radius: var(--r-sm);
+      font-size: .77rem;
+      font-weight: 600;
+      border: 1px solid;
+      cursor: default;
+      user-select: none;
+    }
+    .mkt-pill.is-open {
+      background: var(--green-bg);
+      color: var(--green);
+      border-color: var(--green-bd);
+    }
+    .mkt-pill.is-closed {
+      background: rgba(60,75,101,.12);
+      color: var(--t3);
+      border-color: rgba(60,75,101,.22);
+    }
+    .mkt-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+    }
+    .is-open  .mkt-dot { background: var(--green); animation: pulse-ring 1.8s ease-in-out infinite; }
+    .is-closed .mkt-dot { background: var(--t3); }
+    @keyframes pulse-ring {
+      0%,100% { box-shadow: 0 0 0 0 rgba(0,208,156,.45); }
+      50%     { box-shadow: 0 0 0 5px rgba(0,208,156,0); }
+    }
+
+    .last-upd {
+      font-size: .71rem;
+      color: var(--t3);
+    }
+    .last-upd b { color: var(--t2); font-weight: 500; }
+
+    /* =====================================================
+       SECTION CHROME
+       ===================================================== */
+    .main-content, .section-b {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 2rem 2.5rem;
+    }
+
+    .sec-bar {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .sec-tag {
+      padding: 3px 8px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-size: .62rem;
+      font-weight: 700;
+      color: var(--t3);
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .sec-name {
+      font-size: .86rem;
+      font-weight: 600;
+      color: var(--t2);
+      white-space: nowrap;
+    }
+    .sec-rule { flex: 1; height: 1px; background: var(--border); }
+    .sec-hint {
+      font-size: .7rem;
+      color: var(--t3);
+      white-space: nowrap;
+    }
+
+    /* =====================================================
+       WIDGET GRID
+       ===================================================== */
+    .wgrid {
+      display: grid;
+      gap: 1.2rem;
+      margin-bottom: 1.2rem;
+    }
+    .wgrid-3 { grid-template-columns: repeat(3,1fr); }
+    .wgrid-2 { grid-template-columns: repeat(2,1fr); }
+
+    /* =====================================================
+       WIDGET CARD
+       ===================================================== */
+    .wcard {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: border-color .2s, box-shadow .2s;
+      position: relative;
+    }
+    .wcard:hover {
+      border-color: var(--border-h);
+      box-shadow: 0 10px 38px rgba(0,0,0,.42);
+    }
+    /* Shimmer top line */
+    .wcard::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,.09) 50%, transparent 100%);
+    }
+
+    .wcard-head {
+      padding: 1.1rem 1.25rem .8rem;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .wcard-sym-code {
+      font-size: .62rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--t3);
+      margin-bottom: .2rem;
+    }
+    .wcard-sym-name {
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: -.025em;
+      color: var(--t1);
+      line-height: 1.2;
+    }
+    .wcard-sym-desc {
+      font-size: .7rem;
+      color: var(--t2);
+      margin-top: .15rem;
+    }
+
+    /* Badges */
+    .badge {
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: .6rem;
+      font-weight: 700;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      border: 1px solid;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .bdg-idx  { background:rgba(99,102,241,.1);  color:var(--violet); border-color:rgba(99,102,241,.2); }
+    .bdg-vix  { background:rgba(245,158,11,.1);  color:var(--amber);  border-color:rgba(245,158,11,.2); }
+    .bdg-rate { background:rgba(20,184,166,.1);  color:var(--teal);   border-color:rgba(20,184,166,.2); }
+
+    /* TradingView widget container */
+    .wcard-body { flex: 1; }
+    .tradingview-widget-container { width:100%; }
+    .tradingview-widget-container__widget { width:100%; }
+
+    /* Suppress TV copyright (keep it but make subtle) */
+    .tradingview-widget-copyright {
+      padding: 3px 1.25rem 5px !important;
+      font-size: .58rem !important;
+      line-height: 1.4 !important;
+      opacity: .32 !important;
+    }
+    .tradingview-widget-copyright a {
+      color: var(--t3) !important;
+      text-decoration: none !important;
+    }
+
+    /* Card footer note */
+    .wcard-note {
+      padding: .55rem 1.25rem .75rem;
+      font-size: .68rem;
+      color: var(--t3);
+      line-height: 1.55;
+      border-top: 1px solid var(--border);
+      background: rgba(0,0,0,.18);
+      flex-shrink: 0;
+    }
+    .wcard-note b { color: var(--t2); font-weight: 500; }
+    .sig-green { color: var(--green); font-weight: 600; }
+    .sig-amber { color: var(--amber); font-weight: 600; }
+    .sig-red   { color: var(--red);   font-weight: 600; }
+
+    /* =====================================================
+       MODULE B — ETF 溢价红绿灯
+       ===================================================== */
+    .section-b { padding-top: .5rem; padding-bottom: 4rem; }
+
+    /* Description bar */
+    .mb-desc-bar {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1.2rem;
+      flex-wrap: wrap;
+      padding-bottom: 1.5rem;
+    }
+    .mb-desc-text {
+      font-size: .82rem;
+      color: var(--t2);
+      line-height: 1.75;
+      max-width: 600px;
+    }
+    .mb-desc-text strong { color: var(--t1); font-weight: 600; }
+
+    /* CN market status pill */
+    .mb-cn-status {
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: .7rem;
+      font-weight: 600;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.03);
+      color: var(--t2);
+    }
+    .mb-cn-status.cn-open {
+      border-color: var(--green-bd);
+      background: var(--green-bg);
+      color: var(--green);
+    }
+    .mb-cn-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+      flex-shrink: 0;
+    }
+    .mb-cn-status.cn-open .mb-cn-dot {
+      animation: pulse-dot 1.4s ease-in-out infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: .25; }
+    }
+
+    /* Outer wrap (positions paywall overlay) */
+    .mb-wrap { position: relative; min-height: 140px; }
+
+    /* Loading state */
+    .mb-loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: .85rem;
+      padding: 3.5rem 1rem;
+      color: var(--t3);
+      font-size: .78rem;
+    }
+    .mb-spinner {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      border: 2px solid var(--border-h);
+      border-top-color: var(--blue);
+      animation: mb-spin .75s linear infinite;
+    }
+    @keyframes mb-spin { to { transform: rotate(360deg); } }
+
+    /* Error state */
+    .mb-error {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      flex-wrap: wrap;
+      padding: 1.1rem 1.4rem;
+      border-radius: var(--r);
+      background: var(--red-bg);
+      border: 1px solid var(--red-bd);
+      font-size: .8rem;
+      color: var(--t2);
+    }
+    .mb-error-icon { font-size: 1rem; }
+    .mb-retry {
+      margin-left: auto;
+      padding: 5px 14px;
+      background: transparent;
+      border: 1px solid var(--border-h);
+      border-radius: var(--r-sm);
+      font-family: inherit;
+      font-size: .74rem;
+      font-weight: 600;
+      color: var(--t1);
+      cursor: pointer;
+      transition: background .15s;
+    }
+    .mb-retry:hover { background: rgba(255,255,255,.07); }
+
+    /* ETF card grid */
+    .etf-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 1rem;
+    }
+
+    /* Individual ETF card */
+    .etf-card {
+      position: relative;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--t3);
+      border-radius: var(--r);
+      padding: 1.1rem 1.2rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: .65rem;
+      transition: background .2s, box-shadow .2s;
+    }
+    .etf-card:hover {
+      background: var(--bg-card-h);
+      box-shadow: 0 8px 28px rgba(0,0,0,.38);
+    }
+    /* Signal-specific left border + subtle bg tint */
+    .etf-card.is-danger  { border-left-color: var(--red);
+      background: linear-gradient(130deg, rgba(242,54,69,.06) 0%, var(--bg-card) 45%); }
+    .etf-card.is-caution { border-left-color: var(--amber);
+      background: linear-gradient(130deg, rgba(245,158,11,.06) 0%, var(--bg-card) 45%); }
+    .etf-card.is-safe    { border-left-color: var(--green);
+      background: linear-gradient(130deg, rgba(0,208,156,.06) 0%, var(--bg-card) 45%); }
+    /* Shimmer top line */
+    .etf-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,.08) 50%, transparent 100%);
+    }
+
+    /* Card top: code + name + badge */
+    .etf-card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: .5rem;
+    }
+    .etf-code {
+      font-size: .65rem;
+      font-weight: 700;
+      color: var(--t3);
+      letter-spacing: .08em;
+      font-family: 'SF Mono', ui-monospace, 'Fira Mono', monospace;
+      margin-bottom: .2rem;
+    }
+    .etf-name {
+      font-size: .88rem;
+      font-weight: 700;
+      color: var(--t1);
+      line-height: 1.2;
+    }
+
+    /* Signal badge */
+    .etf-sig {
+      padding: 3px 7px;
+      border-radius: 4px;
+      font-size: .58rem;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      flex-shrink: 0;
+      border: 1px solid;
+    }
+    .etf-sig.is-danger  { background: var(--red-bg);          color: var(--red);   border-color: var(--red-bd); }
+    .etf-sig.is-caution { background: rgba(245,158,11,.09);    color: var(--amber); border-color: rgba(245,158,11,.24); }
+    .etf-sig.is-safe    { background: var(--green-bg);         color: var(--green); border-color: var(--green-bd); }
+    .etf-sig.is-neutral { background: rgba(255,255,255,.04);   color: var(--t2);    border-color: var(--border); }
+
+    /* Large premium % number */
+    .etf-pct {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -.04em;
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+    }
+    .etf-pct.is-danger  { color: var(--red); }
+    .etf-pct.is-caution { color: var(--amber); }
+    .etf-pct.is-safe    { color: var(--green); }
+    .etf-pct.is-neutral { color: var(--t2); }
+    .etf-pct-label {
+      font-size: .63rem;
+      color: var(--t3);
+      margin-top: .22rem;
+    }
+
+    /* Price / IOPV meta */
+    .etf-meta {
+      display: flex;
+      flex-direction: column;
+      gap: .3rem;
+      padding-top: .6rem;
+      border-top: 1px solid var(--border);
+    }
+    .etf-meta-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: .7rem;
+    }
+    .etf-meta-label { color: var(--t3); }
+    .etf-meta-val   { color: var(--t2); font-weight: 600; font-variant-numeric: tabular-nums; }
+
+    /* Updated timestamp */
+    .etf-updated { font-size: .62rem; color: var(--t3); }
+
+    /* Paywall overlay (toggled by JS when MB_PAYWALL_ACTIVE = true) */
+    .mb-paywall {
+      position: absolute;
+      inset: 0;
+      border-radius: var(--r);
+      background: rgba(5,7,15,.75);
+      backdrop-filter: blur(9px);
+      -webkit-backdrop-filter: blur(9px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: .6rem;
+      z-index: 10;
+    }
+    .paywall-icon  { font-size: 1.8rem; }
+    .paywall-title { font-size: 1rem; font-weight: 700; color: var(--t1); }
+    .paywall-sub   { font-size: .78rem; color: var(--t2); text-align: center; max-width: 220px; line-height: 1.5; }
+
+    /* Data freshness footer */
+    .mb-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: .5rem;
+      padding-top: .9rem;
+      margin-top: .6rem;
+      border-top: 1px solid var(--border);
+      font-size: .67rem;
+      color: var(--t3);
+    }
+
+    /* =====================================================
+       FOOTER
+       ===================================================== */
+    .site-footer {
+      border-top: 1px solid var(--border);
+    }
+    .footer-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 1.4rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .footer-copy {
+      font-size: .7rem;
+      color: var(--t3);
+    }
+    .footer-disc {
+      font-size: .67rem;
+      color: var(--t3);
+      text-align: right;
+      max-width: 460px;
+      line-height: 1.6;
+    }
+
+    /* =====================================================
+       RESPONSIVE
+       ===================================================== */
+    @media (max-width: 1100px) {
+      .wgrid-3 { grid-template-columns: repeat(2,1fr); }
+    }
+    @media (max-width: 700px) {
+      .header-title       { font-size: 2rem; }
+      .header-row         { flex-direction: column; }
+      .header-meta        { align-items: flex-start; }
+      .wgrid-3, .wgrid-2  { grid-template-columns: 1fr; }
+      .nav-links          { display: none; }
+      .mb-desc-bar        { flex-direction: column; }
+      .footer-disc        { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =====================================================
+       NAVIGATION
+       ===================================================== -->
+  <nav class="nav" role="navigation" aria-label="主导航">
+    <div class="nav-inner">
+
+      <a href="https://hiwd.com" class="nav-logo" rel="noopener">
+        <span class="nav-logo-text">hiwd<span class="nav-logo-dot">.</span>com</span>
+        <span class="nav-logo-pill">DATA</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#">宏观看板</a></li>
+        <li><a href="#" class="nav-active" aria-current="page">全球雷达</a></li>
+        <li><a href="#module-b">ETF 红绿灯</a></li>
+        <li><a href="#">AI 预期差</a></li>
+        <li><a href="#">《非共识剪报》</a></li>
+      </ul>
+
+      <div class="nav-right">
+        <div class="nav-clock" aria-label="纽约时间">
+          <span class="clock-label">NY&nbsp;</span><span class="clock-val" id="js-ny-time">--:--:--</span>
+        </div>
+      </div>
+
+    </div>
+  </nav>
+
+  <!-- =====================================================
+       TICKER TAPE — TradingView
+       ===================================================== -->
+  <div class="ticker-wrap" aria-hidden="true">
+    <!-- TradingView Widget BEGIN -->
+    <div class="tradingview-widget-container">
+      <div class="tradingview-widget-container__widget"></div>
+      <script type="text/javascript"
+        src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js"
+        async>
+      {
+        "symbols": [
+          { "proName": "SP:SPX",       "title": "标普 500"     },
+          { "proName": "NASDAQ:NDX",   "title": "纳指 100"     },
+          { "proName": "DJ:DJI",       "title": "道  指"       },
+          { "proName": "CBOE:VIX",     "title": "VIX 恐慌"    },
+          { "proName": "TVC:US10Y",    "title": "美 10Y 债息"  },
+          { "proName": "TVC:DXY",      "title": "美元指数"     },
+          { "proName": "TVC:GOLD",     "title": "黄  金"       },
+          { "proName": "NYMEX:CL1!",   "title": "原  油"       }
+        ],
+        "showSymbolLogo": true,
+        "isTransparent": true,
+        "displayMode": "adaptive",
+        "colorTheme": "dark",
+        "locale": "zh_CN"
+      }
+      </script>
+    </div>
+    <!-- TradingView Widget END -->
+  </div>
+
+  <!-- =====================================================
+       PAGE HEADER
+       ===================================================== -->
+  <header class="page-header">
+
+    <nav class="breadcrumb" aria-label="面包屑导航">
+      <a href="https://hiwd.com" rel="noopener">hiwd.com</a>
+      <span class="sep" aria-hidden="true">›</span>
+      <a href="#">数据看板</a>
+      <span class="sep" aria-hidden="true">›</span>
+      <span class="bc-cur">全球宏观雷达</span>
+    </nav>
+
+    <div class="header-row">
+      <div class="header-left">
+        <div class="header-eyebrow">
+          <span class="eyebrow-dot" aria-hidden="true"></span>
+          Module A · 实时数据
+        </div>
+        <h1 class="header-title">
+          全球宏观雷达
+          <span class="header-title-en">Global Macro Radar</span>
+        </h1>
+      </div>
+
+      <div class="header-meta">
+        <div class="mkt-pill is-closed" id="js-mkt-status" role="status" aria-live="polite">
+          <span class="mkt-dot" aria-hidden="true"></span>
+          <span id="js-mkt-text">检测中…</span>
+        </div>
+        <div class="last-upd" id="js-last-upd">
+          北京时间：<b>--</b>
+        </div>
+      </div>
+    </div>
+
+  </header>
+
+  <!-- =====================================================
+       MODULE A — CORE MACRO ANCHORS
+       ===================================================== -->
+  <main class="main-content" id="module-a">
+
+    <div class="sec-bar">
+      <span class="sec-tag">MOD-A</span>
+      <span class="sec-name">宏观核心锚点</span>
+      <div class="sec-rule" aria-hidden="true"></div>
+      <span class="sec-hint">数据源：TradingView · 非实时，仅供参考</span>
+    </div>
+
+    <!-- ── Row 1 : Three Major US Indices ─────────────────── -->
+    <div class="wgrid wgrid-3">
+
+      <!-- S&P 500 -->
+      <article class="wcard">
+        <div class="wcard-head">
+          <div>
+            <div class="wcard-sym-code">SP:SPX</div>
+            <div class="wcard-sym-name">标普 500</div>
+            <div class="wcard-sym-desc">S&amp;P 500 Index · 美国大盘核心基准</div>
+          </div>
+          <span class="badge bdg-idx">股指</span>
+        </div>
+        <div class="wcard-body">
+          <!-- TradingView Widget BEGIN -->
+          <div class="tradingview-widget-container">
+            <div class="tradingview-widget-container__widget"></div>
+            <div class="tradingview-widget-copyright">
+              <a href="https://www.tradingview.com/" target="_blank" rel="noopener noreferrer">TradingView</a>
+            </div>
+            <script type="text/javascript"
+              src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js"
+              async>
+            {
+              "symbol":       "SP:SPX",
+              "width":        "100%",
+              "height":       230,
+              "locale":       "zh_CN",
+              "dateRange":    "3M",
+              "colorTheme":   "dark",
+              "isTransparent": true,
+              "autosize":     false,
+              "largeChartUrl": "https://www.tradingview.com/chart/"
+            }
+            </script>
+          </div>
+          <!-- TradingView Widget END -->
+        </div>
+        <div class="wcard-note">
+          📍 <b>关注要点：</b>跌破 200 日均线视为中期看空信号；判断牛熊分界线的首要参考
+        </div>
+      </article>
+
+      <!-- Nasdaq 100 -->
+      <article class="wcard">
+        <div class="wcard-head">
+          <div>
+            <div class="wcard-sym-code">NASDAQ:NDX</div>
+            <div class="wcard-sym-name">纳斯达克 100</div>
+            <div class="wcard-sym-desc">Nasdaq-100 · AI &amp; 科技股晴雨表</div>
+          </div>
+          <span class="badge bdg-idx">股指</span>
+        </div>
+        <div class="wcard-body">
+          <!-- TradingView Widget BEGIN -->
+          <div class="tradingview-widget-container">
+            <div class="tradingview-widget-container__widget"></div>
+            <div class="tradingview-widget-copyright">
+              <a href="https://www.tradingview.com/" target="_blank" rel="noopener noreferrer">TradingView</a>
+            </div>
+            <script type="text/javascript"
+              src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js"
+              async>
+            {
+              "symbol":       "NASDAQ:NDX",
+              "width":        "100%",
+              "height":       230,
+              "locale":       "zh_CN",
+              "dateRange":    "3M",
+              "colorTheme":   "dark",
+              "isTransparent": true,
+              "autosize":     false,
+              "largeChartUrl": "https://www.tradingview.com/chart/"
+            }
+            </script>
+          </div>
+          <!-- TradingView Widget END -->
+        </div>
+        <div class="wcard-note">
+          📍 <b>关注要点：</b>513100 纳指 ETF 的底层标的，AI 行情核心驱动指数
+        </div>
+      </article>
+
+      <!-- Dow Jones -->
+      <article class="wcard">
+        <div class="wcard-head">
+          <div>
+            <div class="wcard-sym-code">DJ:DJI</div>
+            <div class="wcard-sym-name">道琼斯工业</div>
+            <div class="wcard-sym-desc">Dow Jones Industrial · 蓝筹传统风向标</div>
+          </div>
+          <span class="badge bdg-idx">股指</span>
+        </div>
+        <div class="wcard-body">
+          <!-- TradingView Widget BEGIN -->
+          <div class="tradingview-widget-container">
+            <div class="tradingview-widget-container__widget"></div>
+            <div class="tradingview-widget-copyright">
+              <a href="https://www.tradingview.com/" target="_blank" rel="noopener noreferrer">TradingView</a>
+            </div>
+            <script type="text/javascript"
+              src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js"
+              async>
+            {
+              "symbol":       "DJ:DJI",
+              "width":        "100%",
+              "height":       230,
+              "locale":       "zh_CN",
+              "dateRange":    "3M",
+              "colorTheme":   "dark",
+              "isTransparent": true,
+              "autosize":     false,
+              "largeChartUrl": "https://www.tradingview.com/chart/"
+            }
+            </script>
+          </div>
+          <!-- TradingView Widget END -->
+        </div>
+        <div class="wcard-note">
+          📍 <b>关注要点：</b>工业 &amp; 金融蓝筹代表；纳指÷道指比值衡量市场风险偏好
+        </div>
+      </article>
+
+    </div><!-- /wgrid-3 -->
+
+    <!-- ── Row 2 : VIX + US 10Y ───────────────────────────── -->
+    <div class="wgrid wgrid-2">
+
+      <!-- VIX -->
+      <article class="wcard">
+        <div class="wcard-head">
+          <div>
+            <div class="wcard-sym-code">CBOE:VIX</div>
+            <div class="wcard-sym-name">VIX 恐慌指数</div>
+            <div class="wcard-sym-desc">CBOE Volatility Index · 市场恐惧温度计</div>
+          </div>
+          <span class="badge bdg-vix">波动率</span>
+        </div>
+        <div class="wcard-body">
+          <!-- TradingView Widget BEGIN -->
+          <div class="tradingview-widget-container">
+            <div class="tradingview-widget-container__widget"></div>
+            <div class="tradingview-widget-copyright">
+              <a href="https://www.tradingview.com/" target="_blank" rel="noopener noreferrer">TradingView</a>
+            </div>
+            <script type="text/javascript"
+              src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js"
+              async>
+            {
+              "symbol":       "CBOE:VIX",
+              "width":        "100%",
+              "height":       230,
+              "locale":       "zh_CN",
+              "dateRange":    "3M",
+              "colorTheme":   "dark",
+              "isTransparent": true,
+              "autosize":     false,
+              "largeChartUrl": "https://www.tradingview.com/chart/"
+            }
+            </script>
+          </div>
+          <!-- TradingView Widget END -->
+        </div>
+        <div class="wcard-note">
+          🌡️ <b>信号解读：</b>
+          <span class="sig-green">▼ &lt;15</span> 市场贪婪 &nbsp;·&nbsp;
+          <span class="sig-amber">◆ 15–25</span> 正常 &nbsp;·&nbsp;
+          <span class="sig-red">▲ &gt;25</span> 恐慌警报 &nbsp;·&nbsp;
+          <span class="sig-red">▲▲ &gt;40</span> 危机模式
+        </div>
+      </article>
+
+      <!-- US 10-Year Treasury Yield -->
+      <article class="wcard">
+        <div class="wcard-head">
+          <div>
+            <div class="wcard-sym-code">TVC:US10Y</div>
+            <div class="wcard-sym-name">美 10Y 国债收益率</div>
+            <div class="wcard-sym-desc">US 10-Year Treasury Yield · 全球资产定价之锚</div>
+          </div>
+          <span class="badge bdg-rate">利率</span>
+        </div>
+        <div class="wcard-body">
+          <!-- TradingView Widget BEGIN -->
+          <div class="tradingview-widget-container">
+            <div class="tradingview-widget-container__widget"></div>
+            <div class="tradingview-widget-copyright">
+              <a href="https://www.tradingview.com/" target="_blank" rel="noopener noreferrer">TradingView</a>
+            </div>
+            <script type="text/javascript"
+              src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js"
+              async>
+            {
+              "symbol":       "TVC:US10Y",
+              "width":        "100%",
+              "height":       230,
+              "locale":       "zh_CN",
+              "dateRange":    "3M",
+              "colorTheme":   "dark",
+              "isTransparent": true,
+              "autosize":     false,
+              "largeChartUrl": "https://www.tradingview.com/chart/"
+            }
+            </script>
+          </div>
+          <!-- TradingView Widget END -->
+        </div>
+        <div class="wcard-note">
+          📍 <b>信号解读：</b>
+          收益率快速上行 → 股市估值承压；
+          <span class="sig-red">4.5%+</span> 时高估值科技股历史上均面临显著回调压力
+        </div>
+      </article>
+
+    </div><!-- /wgrid-2 -->
+
+  </main>
+
+  <!-- =====================================================
+       MODULE B — ETF 溢价红绿灯
+       ===================================================== -->
+  <section class="section-b" id="module-b" aria-labelledby="mod-b-title">
+
+    <div class="sec-bar">
+      <span class="sec-tag">MOD-B</span>
+      <span class="sec-name" id="mod-b-title">跨境 ETF 溢价红绿灯</span>
+      <div class="sec-rule" aria-hidden="true"></div>
+      <span class="sec-hint">数据来源：东方财富 · AKShare · 每 15 分钟更新</span>
+    </div>
+
+    <div class="mb-desc-bar">
+      <p class="mb-desc-text">
+        实时追踪纳指 ETF（513100）、标普 ETF（513500）等核心跨境产品的折溢价率，
+        帮助国内投资者规避<strong>高溢价买入陷阱</strong>，捕捉<strong>折价套利窗口</strong>。
+        溢价率 <strong>&gt;10%</strong> 时亮红灯警告；<strong>&lt;0%</strong> 时亮绿灯提示机会。
+      </p>
+      <div class="mb-cn-status cn-close" id="js-cn-status" role="status" aria-live="polite">
+        <div class="mb-cn-dot" aria-hidden="true"></div>
+        <span id="js-cn-text">A股 检测中…</span>
+      </div>
+    </div>
+
+    <div class="mb-wrap">
+
+      <!-- Loading state (shown by default, hidden after fetch) -->
+      <div class="mb-loading" id="js-mb-loading" role="status" aria-live="polite">
+        <div class="mb-spinner" aria-hidden="true"></div>
+        <span>正在拉取 ETF 实时溢价数据…</span>
+      </div>
+
+      <!-- Error state (hidden, shown on fetch failure) -->
+      <div class="mb-error" id="js-mb-error" hidden role="alert">
+        <span class="mb-error-icon" aria-hidden="true">⚠</span>
+        <span id="js-mb-error-msg">数据加载失败，请稍后重试</span>
+        <button class="mb-retry" id="js-mb-retry" type="button">重试</button>
+      </div>
+
+      <!-- ETF cards grid (hidden until data loads, populated by JS) -->
+      <div class="etf-grid" id="js-etf-grid" hidden aria-label="ETF 溢价数据"></div>
+
+      <!-- Paywall overlay — set MB_PAYWALL_ACTIVE = true in the script to enable -->
+      <div class="mb-paywall" id="js-mb-paywall" hidden aria-hidden="true">
+        <span class="paywall-icon" aria-hidden="true">🔒</span>
+        <span class="paywall-title">付费专区</span>
+        <span class="paywall-sub">订阅「非共识剪报」即可解锁实时数据</span>
+      </div>
+
+    </div><!-- /mb-wrap -->
+
+    <!-- Data freshness footer (hidden until first successful load) -->
+    <div class="mb-footer" id="js-mb-footer" hidden>
+      <span id="js-mb-gen-time">数据生成：--</span>
+      <span class="mb-source">数据来源：东方财富 · AKShare · 每 15 分钟自动刷新</span>
+    </div>
+
+  </section>
+
+  <!-- =====================================================
+       FOOTER
+       ===================================================== -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-copy">
+        © 2025 hiwd.com · data.hiwd.com · All rights reserved.
+      </div>
+      <div class="footer-disc">
+        本页面数据均来自 TradingView，存在一定延迟，仅供参考，不构成任何投资建议。
+        市场有风险，投资需谨慎。
+      </div>
+    </div>
+  </footer>
+
+  <!-- =====================================================
+       SCRIPTS — Market Status & Clocks
+       NO API keys · NO external fetch · NO eval/innerHTML injection
+       ===================================================== -->
+  <script>
+    (function () {
+      'use strict';
+
+      /* ── NY Time Clock ─────────────────────────────────── */
+      function formatNY() {
+        return new Intl.DateTimeFormat('en-US', {
+          timeZone: 'America/New_York',
+          hour:   '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: false
+        }).format(new Date());
+      }
+
+      function tickClock() {
+        var el = document.getElementById('js-ny-time');
+        if (el) el.textContent = formatNY();
+      }
+
+      /* ── Market Open/Closed Detection ─────────────────── */
+      function getNYParts() {
+        var parts = new Intl.DateTimeFormat('en-US', {
+          timeZone: 'America/New_York',
+          weekday: 'short',
+          hour:    'numeric',
+          minute:  'numeric',
+          hour12:  false
+        }).formatToParts(new Date());
+
+        var result = {};
+        parts.forEach(function (p) { result[p.type] = p.value; });
+        return result;
+      }
+
+      function isNYMarketOpen() {
+        var p = getNYParts();
+        var weekday = p.weekday;
+        var hour    = parseInt(p.hour,   10);
+        var minute  = parseInt(p.minute, 10);
+        var mins    = hour * 60 + minute;
+        var isWknd  = (weekday === 'Sat' || weekday === 'Sun');
+        return !isWknd && mins >= 570 && mins < 960; // 09:30–16:00
+      }
+
+      function updateMarketStatus() {
+        var pill = document.getElementById('js-mkt-status');
+        var txt  = document.getElementById('js-mkt-text');
+        if (!pill || !txt) return;
+        if (isNYMarketOpen()) {
+          pill.className = 'mkt-pill is-open';
+          txt.textContent = '美股 交易中';
+        } else {
+          pill.className = 'mkt-pill is-closed';
+          txt.textContent = '美股 已收盘';
+        }
+      }
+
+      /* ── Beijing Update Time ───────────────────────────── */
+      function updateBJTime() {
+        var cn = new Intl.DateTimeFormat('zh-CN', {
+          timeZone: 'Asia/Shanghai',
+          year:   'numeric',
+          month:  '2-digit',
+          day:    '2-digit',
+          hour:   '2-digit',
+          minute: '2-digit',
+          hour12: false
+        }).format(new Date()).replace(/\//g, '-');
+
+        var el = document.getElementById('js-last-upd');
+        if (el) {
+          // Use DOM API — avoids innerHTML with any concatenated value
+          while (el.firstChild) { el.removeChild(el.firstChild); }
+          el.appendChild(document.createTextNode('北京时间：'));
+          var bold = document.createElement('b');
+          bold.textContent = cn;
+          el.appendChild(bold);
+        }
+      }
+
+      /* ── Init ──────────────────────────────────────────── */
+      tickClock();
+      updateMarketStatus();
+      updateBJTime();
+
+      setInterval(tickClock,            1000);
+      setInterval(updateMarketStatus,  60000);
+      setInterval(updateBJTime,        60000);
+
+    })();
+  </script>
+
+  <!-- =====================================================
+       MODULE B — ETF 溢价数据获取 & 渲染
+       NO innerHTML with fetched data · strict mode · DOM API only
+       ===================================================== -->
+  <script>
+    (function () {
+      'use strict';
+
+      /* ── 配置 ───────────────────────────────────────────────
+         MB_DATA_URL       : etf-data.json 的 URL（相对或绝对皆可）
+         MB_REFRESH_MS     : 自动刷新间隔（毫秒），默认 15 分钟
+         MB_PAYWALL_ACTIVE : true = 显示付费遮罩（模糊卡片）
+      ────────────────────────────────────────────────────── */
+      var MB_DATA_URL       = '/public/etf-data.json';
+      var MB_REFRESH_MS     = 15 * 60 * 1000;
+      var MB_PAYWALL_ACTIVE = false;
+
+      /* ── 信号配置 ─────────────────────────────────────────── */
+      var SIG = {
+        danger:  { label: '危险', cls: 'is-danger'  },
+        caution: { label: '关注', cls: 'is-caution' },
+        safe:    { label: '机会', cls: 'is-safe'    },
+        neutral: { label: '正常', cls: 'is-neutral' }
+      };
+
+      /* ── DOM 引用 ─────────────────────────────────────────── */
+      var elLoading  = document.getElementById('js-mb-loading');
+      var elError    = document.getElementById('js-mb-error');
+      var elErrMsg   = document.getElementById('js-mb-error-msg');
+      var elGrid     = document.getElementById('js-etf-grid');
+      var elPaywall  = document.getElementById('js-mb-paywall');
+      var elFooter   = document.getElementById('js-mb-footer');
+      var elGenTime  = document.getElementById('js-mb-gen-time');
+      var elRetry    = document.getElementById('js-mb-retry');
+      var elCnStatus = document.getElementById('js-cn-status');
+      var elCnText   = document.getElementById('js-cn-text');
+
+      if (!elGrid) return; // Module B 未在 DOM 中，退出
+
+      /* ── 状态切换 ─────────────────────────────────────────── */
+      function show(el)  { if (el) el.removeAttribute('hidden'); }
+      function hide(el)  { if (el) el.setAttribute('hidden', ''); }
+
+      function showLoading() {
+        show(elLoading); hide(elError); hide(elGrid); hide(elFooter);
+      }
+      function showError(msg) {
+        hide(elLoading); show(elError); hide(elGrid);
+        if (elErrMsg) elErrMsg.textContent = msg || '数据加载失败，请稍后重试';
+      }
+      function showGrid() {
+        hide(elLoading); hide(elError); show(elGrid); show(elFooter);
+        if (MB_PAYWALL_ACTIVE && elPaywall) {
+          show(elPaywall);
+          elPaywall.removeAttribute('aria-hidden');
+        }
+      }
+
+      /* ── A 股市场状态 ─────────────────────────────────────── */
+      function updateCNStatus(isOpen) {
+        if (!elCnStatus || !elCnText) return;
+        if (isOpen) {
+          elCnStatus.className = 'mb-cn-status cn-open';
+          elCnText.textContent = 'A股 交易中';
+        } else {
+          elCnStatus.className = 'mb-cn-status cn-close';
+          elCnText.textContent = 'A股 已收盘';
+        }
+      }
+
+      /* ── 构建单张 ETF 卡片（纯 DOM API，不用 innerHTML）──── */
+      function buildCard(etf) {
+        var sig  = SIG[etf.signal] || SIG.neutral;
+        var pct  = typeof etf.premium_pct === 'number' ? etf.premium_pct : 0;
+        var sign = pct >= 0 ? '+' : '';
+        var pctStr = sign + pct.toFixed(2) + '%';
+
+        /* article wrapper */
+        var card = document.createElement('article');
+        card.className = 'etf-card ' + sig.cls;
+        card.setAttribute('aria-label', (etf.name || etf.code) + '  溢价率 ' + pctStr);
+
+        /* top row: [code + name] [badge] */
+        var top = document.createElement('div');
+        top.className = 'etf-card-top';
+
+        var info    = document.createElement('div');
+        var codeEl  = document.createElement('div');
+        codeEl.className   = 'etf-code';
+        codeEl.textContent = etf.code || '';
+        var nameEl  = document.createElement('div');
+        nameEl.className   = 'etf-name';
+        nameEl.textContent = etf.name || '';
+        info.appendChild(codeEl);
+        info.appendChild(nameEl);
+
+        var badge = document.createElement('span');
+        badge.className   = 'etf-sig ' + sig.cls;
+        badge.textContent = sig.label;
+
+        top.appendChild(info);
+        top.appendChild(badge);
+
+        /* premium % + label */
+        var pctWrap = document.createElement('div');
+        var pctEl   = document.createElement('div');
+        pctEl.className   = 'etf-pct ' + sig.cls;
+        pctEl.textContent = pctStr;
+        var pctLbl  = document.createElement('div');
+        pctLbl.className   = 'etf-pct-label';
+        pctLbl.textContent = '折溢价率（市价 vs IOPV）';
+        pctWrap.appendChild(pctEl);
+        pctWrap.appendChild(pctLbl);
+
+        /* price / iopv meta */
+        var meta = document.createElement('div');
+        meta.className = 'etf-meta';
+
+        function metaRow(lbl, val) {
+          var row = document.createElement('div');
+          row.className = 'etf-meta-row';
+          var l = document.createElement('span');
+          l.className   = 'etf-meta-label';
+          l.textContent = lbl;
+          var v = document.createElement('span');
+          v.className   = 'etf-meta-val';
+          v.textContent = val;
+          row.appendChild(l);
+          row.appendChild(v);
+          return row;
+        }
+
+        var priceStr = typeof etf.price === 'number' ? etf.price.toFixed(4) + ' 元' : '--';
+        var iopvStr  = typeof etf.iopv  === 'number' ? etf.iopv.toFixed(4)  + ' 元' : '--';
+        meta.appendChild(metaRow('市价',     priceStr));
+        meta.appendChild(metaRow('IOPV 估值', iopvStr));
+
+        /* updated timestamp */
+        var upd = document.createElement('div');
+        upd.className   = 'etf-updated';
+        upd.textContent = '采集：' + (etf.updated || '--');
+
+        card.appendChild(top);
+        card.appendChild(pctWrap);
+        card.appendChild(meta);
+        card.appendChild(upd);
+
+        return card;
+      }
+
+      /* ── 渲染 payload ────────────────────────────────────── */
+      function render(payload) {
+        updateCNStatus(!!payload.is_market_open);
+
+        if (elGenTime && payload.generated_at) {
+          elGenTime.textContent = '数据生成：' + payload.generated_at;
+        }
+
+        /* 清空旧卡片 */
+        while (elGrid.firstChild) { elGrid.removeChild(elGrid.firstChild); }
+
+        var etfs = Array.isArray(payload.etfs) ? payload.etfs : [];
+        if (etfs.length === 0) {
+          showError('暂无 ETF 数据（休市 / 数据源暂时不可用）');
+          return;
+        }
+
+        etfs.forEach(function (etf) { elGrid.appendChild(buildCard(etf)); });
+        showGrid();
+      }
+
+      /* ── Fetch ────────────────────────────────────────────── */
+      function loadData() {
+        showLoading();
+        fetch(MB_DATA_URL, { cache: 'no-cache' })
+          .then(function (res) {
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            return res.json();
+          })
+          .then(render)
+          .catch(function (err) {
+            var msg = '数据加载失败';
+            if (err && err.message) {
+              if (/Failed to fetch|NetworkError|Load failed/i.test(err.message)) {
+                msg = '网络异常，请检查连接后重试';
+              } else {
+                msg = '数据加载失败（' + err.message + '）';
+              }
+            }
+            showError(msg);
+          });
+      }
+
+      /* ── 重试按钮 ────────────────────────────────────────── */
+      if (elRetry) { elRetry.addEventListener('click', loadData); }
+
+      /* ── 初始化 + 定时刷新 ──────────────────────────────── */
+      loadData();
+      setInterval(loadData, MB_REFRESH_MS);
+
+    })();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,44 @@
+# ── Python ────────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# ── Virtual env ───────────────────────────────────────────────────────────────
+venv/
+.venv/
+env/
+.env/
+
+# ── Secrets — NEVER commit these ─────────────────────────────────────────────
+scripts/credentials.json
+scripts/config.json
+credentials.json
+*.p12
+*.pem
+*.key
+.env
+.env.*
+!.env.example
+
+# ── Generated data ────────────────────────────────────────────────────────────
+# public/etf-data.json is intentionally NOT ignored:
+#   GitHub Actions commits the updated file so GitHub Pages can serve it.
+#   If running a dedicated server instead, add it back here.
+
+# ── macOS ─────────────────────────────────────────────────────────────────────
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# ── Editors ───────────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*~

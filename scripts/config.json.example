@@ -1,0 +1,26 @@
+{
+  "_comment": "复制此文件为 config.json 并按需修改；config.json 已加入 .gitignore，不会被提交",
+
+  "etf_list": [
+    { "code": "513100", "name": "纳指 ETF（华夏）" },
+    { "code": "513500", "name": "标普 500 ETF" },
+    { "code": "159509", "name": "纳指科技 ETF" },
+    { "code": "159941", "name": "纳指 ETF（广发）" },
+    { "code": "513010", "name": "美国债券 ETF" },
+    { "code": "159920", "name": "恒生 ETF" }
+  ],
+
+  "thresholds": {
+    "_comment": "溢价率阈值（%）：danger > 红色警告；caution > 黄色关注；safe < 绿色套利",
+    "danger":  10.0,
+    "caution":  5.0,
+    "safe":     0.0
+  },
+
+  "google_sheets": {
+    "_comment": "不使用 Google Sheets 可忽略此块；credentials.json 是服务账号 JSON 密钥，绝不提交到 git",
+    "spreadsheet_id":   "YOUR_SPREADSHEET_ID",
+    "sheet_name":       "ETF溢价",
+    "credentials_file": "credentials.json"
+  }
+}

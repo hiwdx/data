@@ -1,0 +1,9 @@
+# ETF Pipeline — Python 依赖
+# 安装: pip install -r requirements.txt
+
+# 核心：A 股 ETF 数据
+akshare>=1.12.0
+
+# Google Sheets 写入（可选，不用 Sheets 可不装）
+gspread>=5.12.0
+google-auth>=2.23.0
