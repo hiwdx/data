@@ -33,7 +33,7 @@ DEFAULT_OUT = SCRIPT_DIR.parent / "public" / "macro-data.json"
 
 # ── 要采集的指标（Yahoo Finance 代码）──────────────────────────────────
 SYMBOLS = [
-    {"ticker": "DX=F",    "key": "DXY",   "label": "美元指数",       "fmt": "price2"},
+    {"ticker": "DX-Y.NYB", "key": "DXY",   "label": "美元指数",       "fmt": "price2"},
     {"ticker": "^TNX",    "key": "US10Y",  "label": "美债10Y收益率",  "fmt": "pct"},
     {"ticker": "^VIX",    "key": "VIX",    "label": "恐慌指数",       "fmt": "price2"},
     {"ticker": "^NDX",    "key": "NDX",    "label": "纳斯达克100",    "fmt": "int"},

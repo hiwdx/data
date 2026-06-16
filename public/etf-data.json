@@ -1,5 +1,42 @@
 {
-  "generated_at": "1970-01-01T00:00:00",
-  "is_market_open": false,
-  "etfs": []
+  "generated_at": "2026-06-16T11:16:28",
+  "is_market_open": true,
+  "etfs": [
+    {
+      "code": "513100",
+      "name": "纳指 ETF",
+      "price": 2.283,
+      "iopv": 2.0768,
+      "premium_pct": 9.93,
+      "updated": "2026-06-16 11:16:28",
+      "signal": "caution"
+    },
+    {
+      "code": "513500",
+      "name": "标普 ETF",
+      "price": 2.585,
+      "iopv": 2.4331,
+      "premium_pct": 6.24,
+      "updated": "2026-06-16 11:16:28",
+      "signal": "caution"
+    },
+    {
+      "code": "159509",
+      "name": "纳指科技",
+      "price": 2.767,
+      "iopv": 2.3175,
+      "premium_pct": 19.4,
+      "updated": "2026-06-16 11:16:28",
+      "signal": "danger"
+    },
+    {
+      "code": "159941",
+      "name": "纳指 ETF（广发）",
+      "price": 1.692,
+      "iopv": 1.5567,
+      "premium_pct": 8.69,
+      "updated": "2026-06-16 11:16:28",
+      "signal": "caution"
+    }
+  ]
 }
