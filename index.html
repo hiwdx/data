@@ -7,10 +7,10 @@
 <link rel="icon" href="/favicon.ico">
 <title>hiwd 数据看板</title>
 
-<!-- Noto Sans + Noto Sans SC (logo web fallback) + Outfit (UI) + JetBrains Mono -->
+<!-- Inter (logo) + Noto Sans SC + Outfit (UI) + JetBrains Mono -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400&family=Noto+Sans+SC:wght@300;400&family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400&family=Noto+Sans:wght@300;400&family=Noto+Sans+SC:wght@300;400&family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
 /* ============================================================
@@ -122,15 +122,15 @@ body::before {
   user-select: none;
 }
 .logo-hiwd {
-  /* SF Pro Display Light — matches hiwd.com wordmark weight (300). */
-  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Noto Sans', sans-serif;
+  /* Inter Regular — matches hiwd.com wordmark (font-weight: 400, letter-spacing: -0.02em). */
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Noto Sans', sans-serif;
   font-size: 1.22rem;
-  font-weight: 300;
-  letter-spacing: -.01em;
+  font-weight: 400;
+  letter-spacing: -0.02em;
   color: var(--t1);
   line-height: 1;
 }
-/* Dotless-i (ı) + teal dot — exact brand teal #00B4A0 from logo.png */
+/* Dotless-i (ı) + teal dot — brand teal #00C2B3 from hiwd.com */
 .logo-i {
   position: relative;
   display: inline-block;
@@ -144,7 +144,7 @@ body::before {
   width: .155em;
   height: .155em;
   border-radius: 50%;
-  background: #00B4A0;
+  background: #00C2B3;
 }
 /* thin vertical rule between wordmark and product name */
 .logo-rule {
@@ -156,10 +156,10 @@ body::before {
   align-self: center;
 }
 .logo-sub {
-  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
   font-size: 1.22rem;
-  font-weight: 300;
-  letter-spacing: -.01em;
+  font-weight: 400;
+  letter-spacing: -0.02em;
   color: var(--t1);
 }
 
