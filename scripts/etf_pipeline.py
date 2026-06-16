@@ -93,7 +93,7 @@ def load_config() -> Dict[str, Any]:
 #  数据获取 — AKShare
 # ══════════════════════════════════════════════════════════════════════════════
 
-def fetch_etf_data(etf_list: List[Dict]) -> List[Dict]:
+def fetch_etf_data(etf_list: List[Dict], fallback: Optional[Dict[str, Dict]] = None) -> List[Dict]:
     """
     通过 AKShare fund_etf_spot_em() 拉取 ETF 实时行情。
     数据来源：东方财富（15 秒级别更新，交易时段可用）。
@@ -153,6 +153,20 @@ def fetch_etf_data(etf_list: List[Dict]) -> List[Dict]:
         if premium_pct is None:
             if price is not None and iopv is not None and iopv != 0:
                 premium_pct = (price - iopv) / iopv * 100.0
+            elif fallback and code in fallback:
+                # 午休等非交易时段 IOPV=0，沿用上次已知溢价率（标注为估算）
+                fb = fallback[code]
+                log.info(f"  {code} IOPV 暂无，沿用上次溢价率 {fb['premium_pct']:+.2f}%（午休/非交易时段）")
+                results.append({
+                    "code":        code,
+                    "name":        str(etf_cfg.get("name") or fb.get("name") or code),
+                    "price":       round(float(price or fb.get("price", 0)), 4),
+                    "iopv":        round(float(fb.get("iopv", 0)), 4),
+                    "premium_pct": fb["premium_pct"],
+                    "updated":     fb.get("updated", now_str),
+                    "stale":       True,
+                })
+                continue
             else:
                 log.warning(f"  ⚠ ETF {code} 无法计算溢价率（缺少市价或 IOPV），跳过")
                 continue
@@ -366,13 +380,26 @@ def main() -> None:
     thresholds = cfg.get("thresholds",     DEFAULT_CONFIG["thresholds"])
     sheets_cfg = cfg.get("google_sheets",  DEFAULT_CONFIG["google_sheets"])
 
-    # 1. 拉数据
-    data = fetch_etf_data(etf_list)
+    # 1. 加载上次已知数据（用于非交易时段 IOPV=0 时的兜底）
+    out_path = Path(args.json_out)
+    fallback: Dict[str, Dict] = {}
+    if out_path.exists():
+        try:
+            prev = json.loads(out_path.read_text(encoding="utf-8"))
+            for etf in prev.get("etfs", []):
+                if etf.get("code"):
+                    fallback[etf["code"]] = etf
+            log.info(f"已加载历史数据作为兜底（{len(fallback)} 条）")
+        except Exception as e:
+            log.warning(f"读取历史 JSON 失败: {e}")
+
+    # 2. 拉数据
+    data = fetch_etf_data(etf_list, fallback=fallback)
     if not data:
         log.error("❌ 未获取到任何 ETF 数据，退出")
         sys.exit(1)
 
-    # 2. 构建 payload
+    # 3. 构建 payload
     payload = build_payload(data, thresholds)
 
     if args.dry_run:
@@ -380,10 +407,10 @@ def main() -> None:
         print(json.dumps(payload, ensure_ascii=False, indent=2))
         return
 
-    # 3. 写 JSON
-    write_json(payload, Path(args.json_out))
+    # 4. 写 JSON
+    write_json(payload, out_path)
 
-    # 4. 可选：写 Google Sheets
+    # 5. 可选：写 Google Sheets
     if args.sheets:
         write_to_sheets(payload, sheets_cfg)
 
