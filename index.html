@@ -756,6 +756,7 @@ body {
                    premium_pct: e.premium_pct, signal: e.signal };
         });
         renderETF(mockEtfs);
+        updateCN(isCNMarketOpen());   // pipeline 不可用时用本地时间判断
         setRibbon('mock', '');
       });
   }
@@ -782,9 +783,23 @@ body {
       .replace(/"/g, '&quot;');
   }
 
+  /* ── A股市场开市判断（BJT = UTC+8，不依赖 pipeline）──── */
+  function isCNMarketOpen() {
+    var bjt  = new Date(Date.now() + 8 * 3600000); // shift to UTC+8
+    var day  = bjt.getUTCDay();                     // 0=Sun … 6=Sat
+    var min  = bjt.getUTCHours() * 60 + bjt.getUTCMinutes();
+    if (day === 0 || day === 6) return false;       // weekend
+    // 上午 09:30–11:30（含集合竞价缓冲）
+    if (min >= 570 && min < 690) return true;
+    // 下午 13:00–15:00
+    if (min >= 780 && min < 900) return true;
+    return false;
+  }
+
   /* ── INIT ────────────────────────────────────────────────── */
   tick();
-  loadData();                              // 首次加载
+  updateCN(isCNMarketOpen());              // 立即根据本地时间显示开市状态
+  loadData();                              // 首次加载（live 数据可覆盖上面的判断）
   setInterval(loadData, REFRESH_MS);       // 15 分钟自动刷新
   setInterval(tick, 30000);               // 时钟每 30s 更新
 
