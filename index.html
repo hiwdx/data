@@ -85,32 +85,11 @@ body::before {
   pointer-events: none;
   z-index: 0;
 }
-.ribbon, .hdr, main, footer { position: relative; z-index: 1; }
+.hdr, main, footer { position: relative; z-index: 1; }
 
-/* ============================================================
-   STATUS RIBBON
-   ============================================================ */
-.ribbon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: .4rem;
-  padding: .32rem 1rem;
-  font-family: var(--font-mono);
-  font-size: .58rem;
-  font-weight: 500;
-  letter-spacing: .04em;
-}
-.ribbon.is-mock {
-  background: rgba(245,166,35,.04);
-  color: rgba(245,166,35,.5);
-  border-bottom: 1px solid rgba(245,166,35,.1);
-}
-.ribbon.is-live {
-  background: rgba(14,200,122,.04);
-  color: rgba(14,200,122,.5);
-  border-bottom: 1px solid rgba(14,200,122,.1);
-}
+/* ── Header status border — replaces ribbon ── */
+.hdr.is-live { border-bottom-color: rgba(14,200,122,.22); }
+.hdr.is-mock { border-bottom-color: rgba(245,166,35,.18); }
 
 /* ============================================================
    STICKY HEADER
@@ -600,11 +579,6 @@ body::before {
 </head>
 <body>
 
-<!-- ── STATUS RIBBON（JS 动态切换 mock / live）── -->
-<div class="ribbon is-mock" id="ribbon">
-  ⚡&nbsp; DEMO — 显示 Mock 数据中，正在拉取实时行情…
-</div>
-
 <!-- ── STICKY HEADER ── -->
 <header class="hdr">
   <a href="https://hiwd.com" class="logo">
@@ -673,11 +647,11 @@ body::before {
 
 <footer class="footer">
   <nav class="footer-nav">
-    <a href="https://hiwd.com">hiwd.com</a>
+    <a href="https://hiwd.com">主站</a>
     <span class="sep">·</span>
-    <a href="https://daily.hiwd.com">daily.hiwd.com</a>
+    <a href="https://daily.hiwd.com">每日简报</a>
     <span class="sep">·</span>
-    <a href="https://data.hiwd.com" class="active">data.hiwd.com</a>
+    <a href="https://data.hiwd.com" class="active">数据看板</a>
   </nav>
   <div class="footer-legal">
     数据仅供参考，不构成投资建议 &middot; FOR REFERENCE ONLY — NOT INVESTMENT ADVICE<br>
@@ -856,16 +830,26 @@ body::before {
     }
   }
 
-  /* ── Ribbon（mock ↔ live 切换）─────────────────────────── */
+  /* ── Ribbon → Header border + ts 时间戳 ─────────────────── */
   function setRibbon(mode, genAt) {
-    var el = document.getElementById('ribbon');
-    if (!el) return;
+    var hdr = document.querySelector('.hdr');
+    var ts  = document.getElementById('ts');
     if (mode === 'live') {
-      el.className = 'ribbon is-live';
-      el.textContent = '✅  实时行情 · 数据生成：' + (genAt || '—');
+      isLive = true;
+      if (hdr) { hdr.classList.remove('is-mock'); hdr.classList.add('is-live'); }
+      if (ts && genAt) {
+        /* 把 ISO 字符串转成 "2026.06.16  11:27 CST" */
+        var d = new Date(genAt);
+        if (!isNaN(d)) {
+          ts.textContent =
+            d.getFullYear() + '.' + pad(d.getMonth()+1) + '.' + pad(d.getDate())
+            + '  ' + pad(d.getHours()) + ':' + pad(d.getMinutes()) + ' CST';
+        }
+      }
     } else {
-      el.className = 'ribbon is-mock';
-      el.textContent = '⚡  DEMO MODE — Mock 数据 · 数据管道暂时不可用';
+      isLive = false;
+      if (hdr) { hdr.classList.remove('is-live'); hdr.classList.add('is-mock'); }
+      showLocalTime();
     }
   }
 
@@ -895,15 +879,20 @@ body::before {
       });
   }
 
-  /* ── 时钟 ────────────────────────────────────────────────── */
+  /* ── 时钟（Mock 模式下显示本地时间；Live 模式显示数据生成时间）── */
+  var isLive = false;
   function pad(n) { return String(n).padStart(2, '0'); }
-  function tick() {
+  function showLocalTime() {
     var d = new Date();
     var el = document.getElementById('ts');
     if (el) el.textContent =
       d.getFullYear() + '.' + pad(d.getMonth()+1) + '.' + pad(d.getDate())
       + '  ' + pad(d.getHours()) + ':' + pad(d.getMinutes()) + ' CST';
+  }
+  function tick() {
+    if (!isLive) showLocalTime();
     var ed = document.getElementById('edDate');
+    var d = new Date();
     if (ed) ed.textContent =
       d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate());
   }
