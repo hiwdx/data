@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <meta name="description" content="跨境ETF溢价红绿灯 · 全球宏观锚点 · data.hiwd.com">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%230C1019'/><text x='16' y='24' font-family='system-ui,sans-serif' font-size='21' font-weight='800' text-anchor='middle' fill='%232C6FED'>h</text></svg>">
-<title>宏观雷达 · data.hiwd.com</title>
+<link rel="icon" href="/favicon.ico">
+<title>hiwd 数据看板</title>
 
 <!-- Outfit (UI) + JetBrains Mono (numbers/tickers) -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -116,32 +116,26 @@ body::before {
 .logo {
   display: flex;
   align-items: center;
-  gap: 0;
+  gap: .5rem;
   text-decoration: none;
   white-space: nowrap;
   user-select: none;
 }
 .logo-hiwd {
   font-family: var(--font-ui);
-  font-size: .88rem;
-  font-weight: 800;
-  letter-spacing: -.01em;
+  font-size: .95rem;
+  font-weight: 500;
+  letter-spacing: -.02em;
   color: var(--t1);
 }
-.logo-dot {
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  background: var(--blue);
-  margin: 0 .42rem;
-  flex-shrink: 0;
-  opacity: .9;
+.logo-hiwd .logo-i {
+  color: #2ECDB6;
 }
 .logo-sub {
   font-family: var(--font-ui);
   font-size: .75rem;
-  font-weight: 600;
-  letter-spacing: .02em;
+  font-weight: 500;
+  letter-spacing: .01em;
   color: var(--t2);
 }
 
@@ -594,8 +588,7 @@ body::before {
 <!-- ── STICKY HEADER ── -->
 <header class="hdr">
   <a href="https://hiwd.com" class="logo">
-    <span class="logo-hiwd">hiwd</span>
-    <span class="logo-dot"></span>
+    <span class="logo-hiwd">h<span class="logo-i">i</span>wd</span>
     <span class="logo-sub">数据看板</span>
   </a>
   <div class="hdr-right">
@@ -668,7 +661,7 @@ body::before {
   </nav>
   <div class="footer-legal">
     数据仅供参考，不构成投资建议 &middot; FOR REFERENCE ONLY — NOT INVESTMENT ADVICE<br>
-    © 2026 <a href="https://hiwd.com">hiwd.com</a>
+    © 2026 <a href="https://hiwd.com">hiwd</a>
   </div>
 </footer>
 
