@@ -7,10 +7,10 @@
 <link rel="icon" href="/favicon.ico">
 <title>hiwd 数据看板</title>
 
-<!-- Noto Sans (logo fallback) + Outfit (UI) + JetBrains Mono (numbers/tickers) -->
+<!-- Noto Sans + Noto Sans SC (logo web fallback) + Outfit (UI) + JetBrains Mono -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500&family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400&family=Noto+Sans+SC:wght@300;400&family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
 /* ============================================================
@@ -122,9 +122,9 @@ body::before {
   user-select: none;
 }
 .logo-hiwd {
-  /* Apple SD Gothic Neo = pixel-accurate match to hiwd.com logo.png (score 0.012).
-     Noto Sans is the closest free web fallback; works on Windows / Android. */
-  font-family: 'Apple SD Gothic Neo', 'Noto Sans', 'PingFang SC', sans-serif;
+  /* SF Pro Display — matches hiwd.com wordmark. Falls back to system-ui on Apple devices,
+     Noto Sans on Windows / Android. */
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Noto Sans', sans-serif;
   font-size: 1.22rem;
   font-weight: 400;
   letter-spacing: -.01em;
@@ -157,7 +157,7 @@ body::before {
   align-self: center;
 }
 .logo-sub {
-  font-family: 'Apple SD Gothic Neo', 'Noto Sans', 'PingFang SC', sans-serif;
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Noto Sans SC', 'Noto Sans', sans-serif;
   font-size: .72rem;
   font-weight: 400;
   letter-spacing: .01em;
@@ -916,12 +916,12 @@ body::before {
       isLive = true;
       if (hdr) { hdr.classList.remove('is-mock'); hdr.classList.add('is-live'); }
       if (ts && genAt) {
-        /* 把 ISO 字符串转成 "2026.06.16  11:27 CST" */
-        var d = new Date(genAt);
+        /* 管道输出的 ISO 字符串视为北京时间(UTC+8)解析。
+           若已带时区后缀则剥掉后重新附上 +08:00，保证一致。 */
+        var raw = genAt.replace(/([+-]\d{2}:?\d{2}|Z)$/, '') + '+08:00';
+        var d   = new Date(raw);
         if (!isNaN(d)) {
-          ts.textContent =
-            d.getFullYear() + '.' + pad(d.getMonth()+1) + '.' + pad(d.getDate())
-            + '  ' + pad(d.getHours()) + ':' + pad(d.getMinutes()) + ' CST';
+          ts.textContent = fmtBJT(toBJT(d.getTime()));
         }
       }
     } else {
@@ -961,22 +961,29 @@ body::before {
       });
   }
 
-  /* ── 时钟（Mock 模式下显示本地时间；Live 模式显示数据生成时间）── */
+  /* ── 时钟（统一用北京时间 UTC+8，与管道数据时区一致）──── */
   var isLive = false;
   function pad(n) { return String(n).padStart(2, '0'); }
+
+  /* 把任意 UTC 毫秒转成"北京时间 Date 对象"（用 getUTC* 方法读取）*/
+  function toBJT(ms) { return new Date(ms + 8 * 3600000); }
+
+  /* 把北京时间 Date 对象格式化成 "2026.06.16  14:15 CST" */
+  function fmtBJT(bjt) {
+    return bjt.getUTCFullYear() + '.' + pad(bjt.getUTCMonth()+1) + '.' + pad(bjt.getUTCDate())
+         + '  ' + pad(bjt.getUTCHours()) + ':' + pad(bjt.getUTCMinutes()) + ' CST';
+  }
+
   function showLocalTime() {
-    var d = new Date();
     var el = document.getElementById('ts');
-    if (el) el.textContent =
-      d.getFullYear() + '.' + pad(d.getMonth()+1) + '.' + pad(d.getDate())
-      + '  ' + pad(d.getHours()) + ':' + pad(d.getMinutes()) + ' CST';
+    if (el) el.textContent = fmtBJT(toBJT(Date.now()));
   }
   function tick() {
     if (!isLive) showLocalTime();
-    var ed = document.getElementById('edDate');
-    var d = new Date();
+    var ed  = document.getElementById('edDate');
+    var bjt = toBJT(Date.now());
     if (ed) ed.textContent =
-      d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate());
+      bjt.getUTCFullYear() + '-' + pad(bjt.getUTCMonth()+1) + '-' + pad(bjt.getUTCDate());
   }
 
   /* ── HTML 转义（防止管道数据中的意外字符破坏布局）──────── */

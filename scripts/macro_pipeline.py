@@ -106,7 +106,7 @@ def fetch_macro() -> list:
         sys.exit(1)
 
     results = []
-    now_str = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    now_str = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=8))).strftime("%Y-%m-%d %H:%M:%S")
 
     for s in SYMBOLS:
         price, prev = get_quote(s["ticker"])
@@ -160,7 +160,7 @@ def main() -> None:
         sys.exit(1)
 
     payload = {
-        "generated_at": datetime.datetime.now().isoformat(timespec="seconds"),
+        "generated_at": datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=8))).isoformat(timespec="seconds"),
         "macro": data,
     }
 
