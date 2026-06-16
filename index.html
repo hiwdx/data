@@ -787,30 +787,56 @@ body::before {
   /* ── 一句话总结（根据 ETF 数据动态生成）─────────────────── */
   function updateEditorSummary(etfs) {
     var el = document.getElementById('edSummary');
-    if (!el) return;
-    var danger  = etfs.filter(function(e){ return e.signal === 'danger';  }).length;
-    var caution = etfs.filter(function(e){ return e.signal === 'caution'; }).length;
-    var safe    = etfs.filter(function(e){ return e.signal === 'safe';    }).length;
-    var total   = etfs.length;
-    var maxPct  = Math.max.apply(null, etfs.map(function(e){ return e.premium_pct || 0; }));
+    if (!el || !etfs.length) return;
+
+    var sorted  = etfs.slice().sort(function(a,b){ return (b.premium_pct||0)-(a.premium_pct||0); });
+    var top     = sorted[0];                          // 溢价最高
+    var bottom  = sorted[sorted.length - 1];          // 折价/最低溢价
+    var danger  = etfs.filter(function(e){ return e.signal === 'danger';  });
+    var safe    = etfs.filter(function(e){ return e.signal === 'safe';    });
+
+    var pFmt = function(pct) {
+      return (pct >= 0 ? '+' : '') + pct.toFixed(1) + '%';
+    };
+
     var msg;
-    if (danger >= 3) {
-      msg = '多支跨境 ETF 溢价严重过热，当前追高风险极大';
-    } else if (danger >= 2) {
-      msg = danger + ' 支 ETF 进入过热区间，短期追高需谨慎';
-    } else if (danger === 1 && caution >= 2) {
-      msg = '溢价整体偏高，最高达 +' + maxPct.toFixed(1) + '%，建议等待回落';
-    } else if (danger === 1) {
-      msg = '1 支 ETF 溢价过热，其余处于关注区间';
-    } else if (safe >= 2) {
-      msg = safe + ' 支 ETF 出现折价，存在低吸套利窗口';
-    } else if (safe === 1 && caution === 0 && danger === 0) {
-      msg = '整体溢价平稳，' + etfs[0].name + ' 等可关注折价机会';
-    } else if (caution >= 3) {
-      msg = '多支 ETF 溢价偏高，需持续关注';
+
+    if (danger.length >= 3) {
+      // 三支以上过热 → 点出最高的那支，报整体区间
+      var lo = danger[danger.length-1].premium_pct;
+      msg = top.name + ' 溢价 ' + pFmt(top.premium_pct) + '，'
+          + danger.length + ' 支过热（区间 ' + pFmt(lo) + '~' + pFmt(top.premium_pct) + '），追高成本极高';
+
+    } else if (danger.length >= 1 && safe.length >= 1) {
+      // 有过热也有折价 → 对比最贵与最便宜
+      msg = top.name + ' 溢价 ' + pFmt(top.premium_pct)
+          + '；' + bottom.name + ' 折价 ' + pFmt(bottom.premium_pct) + '，两者性价比差距悬殊';
+
+    } else if (danger.length >= 2) {
+      // 多支过热，无折价 → 点名两支
+      msg = danger[0].name + ' 溢价 ' + pFmt(danger[0].premium_pct)
+          + '，' + danger[1].name + ' ' + pFmt(danger[1].premium_pct)
+          + '，买入即为溢价成本买单';
+
+    } else if (danger.length === 1) {
+      // 一支过热
+      msg = top.name + ' 溢价高达 ' + pFmt(top.premium_pct)
+          + '，以当前市价买入需多付约 ' + top.premium_pct.toFixed(0) + '% 成本';
+
+    } else if (safe.length >= 2) {
+      msg = bottom.name + ' 等 ' + safe.length + ' 支 ETF 低于净值'
+          + '（最低 ' + pFmt(bottom.premium_pct) + '），折价套利窗口已开';
+
+    } else if (safe.length === 1) {
+      msg = bottom.name + ' 接近净值（' + pFmt(bottom.premium_pct) + '）'
+          + '，' + top.name + ' 溢价 ' + pFmt(top.premium_pct) + '，性价比差距明显';
+
     } else {
-      msg = '当前跨境 ETF 溢价整体可控，保持观察';
+      // 全部 neutral/caution
+      msg = '溢价区间 ' + pFmt(bottom.premium_pct) + '~' + pFmt(top.premium_pct)
+          + '，' + top.name + ' 溢价偏高，整体尚在可控范围';
     }
+
     el.textContent = msg;
   }
 
