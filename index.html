@@ -645,8 +645,8 @@ body::before {
     <div class="ed-eyebrow">今日判定 &middot; <span id="edDate">—</span></div>
     <div class="ed-summary" id="edSummary">数据加载中…</div>
     <div class="ed-quote">
-      今日宏观数据已更新。关注 <span class="ok">全球宏观锚点</span> 与跨境 ETF 溢价动态，
-      完整 AI 解读见每日简报。
+      溢价率是买卖成本的信号，背后的宏观驱动、联储动向与汇率风险，
+      需要更完整的上下文才能判断。今日 AI 简报已发布。
     </div>
     <a href="https://daily.hiwd.com"
        class="cta"
@@ -791,51 +791,41 @@ body::before {
     if (!el || !etfs.length) return;
 
     var sorted  = etfs.slice().sort(function(a,b){ return (b.premium_pct||0)-(a.premium_pct||0); });
-    var top     = sorted[0];                          // 溢价最高
-    var bottom  = sorted[sorted.length - 1];          // 折价/最低溢价
-    var danger  = etfs.filter(function(e){ return e.signal === 'danger';  });
-    var safe    = etfs.filter(function(e){ return e.signal === 'safe';    });
+    var top     = sorted[0];
+    var bottom  = sorted[sorted.length - 1];
+    var danger  = sorted.filter(function(e){ return e.signal === 'danger';  });
+    var safe    = sorted.filter(function(e){ return e.signal === 'safe';    });
+    var caution = sorted.filter(function(e){ return e.signal === 'caution'; });
 
-    var pFmt = function(pct) {
-      return (pct >= 0 ? '+' : '') + pct.toFixed(1) + '%';
-    };
+    var pFmt = function(pct) { return (pct >= 0 ? '+' : '') + pct.toFixed(1) + '%'; };
 
     var msg;
 
-    if (danger.length >= 3) {
-      // 三支以上过热 → 点出最高的那支，报整体区间
-      var lo = danger[danger.length-1].premium_pct;
-      msg = top.name + ' 溢价 ' + pFmt(top.premium_pct) + '，'
-          + danger.length + ' 支过热（区间 ' + pFmt(lo) + '~' + pFmt(top.premium_pct) + '），追高成本极高';
-
-    } else if (danger.length >= 1 && safe.length >= 1) {
-      // 有过热也有折价 → 对比最贵与最便宜
-      msg = top.name + ' 溢价 ' + pFmt(top.premium_pct)
-          + '；' + bottom.name + ' 折价 ' + pFmt(bottom.premium_pct) + '，两者性价比差距悬殊';
-
-    } else if (danger.length >= 2) {
-      // 多支过热，无折价 → 点名两支
-      msg = danger[0].name + ' 溢价 ' + pFmt(danger[0].premium_pct)
-          + '，' + danger[1].name + ' ' + pFmt(danger[1].premium_pct)
-          + '，买入即为溢价成本买单';
+    if (danger.length >= 2) {
+      // 判断：不是描述数字，而是说清楚该怎么做
+      var names = danger.slice(0, 2).map(function(e){ return e.name; }).join('、');
+      msg = names + ' 溢价显著偏高，当前不宜新仓追入'
+          + (safe.length ? '；' + bottom.name + ' 接近净值，是相对合理的替代标的' : '，建议等溢价收窄后再考虑入场');
 
     } else if (danger.length === 1) {
-      // 一支过热
-      msg = top.name + ' 溢价高达 ' + pFmt(top.premium_pct)
-          + '，以当前市价买入需多付约 ' + top.premium_pct.toFixed(0) + '% 成本';
+      msg = top.name + ' 溢价过重，追高得不偿失'
+          + (safe.length ? '；' + bottom.name + ' 折价，性价比更优' : '；其余标的溢价尚在合理区间，可正常参考');
 
     } else if (safe.length >= 2) {
-      msg = bottom.name + ' 等 ' + safe.length + ' 支 ETF 低于净值'
-          + '（最低 ' + pFmt(bottom.premium_pct) + '），折价套利窗口已开';
+      var safeNames = safe.slice(0, 2).map(function(e){ return e.name; }).join('、');
+      msg = safeNames + ' 折价低于净值，低成本建仓机会难得，值得重点关注';
+
+    } else if (safe.length === 1 && caution.length === 0 && danger.length === 0) {
+      msg = bottom.name + ' 是今日唯一折价标的，其余溢价合理——整体建仓窗口相对友好';
 
     } else if (safe.length === 1) {
-      msg = bottom.name + ' 接近净值（' + pFmt(bottom.premium_pct) + '）'
-          + '，' + top.name + ' 溢价 ' + pFmt(top.premium_pct) + '，性价比差距明显';
+      msg = '今日跨境配置优先考虑 ' + bottom.name + '（折价），避开 ' + top.name + '（溢价 ' + pFmt(top.premium_pct) + '）';
+
+    } else if (caution.length >= 3 && danger.length === 0) {
+      msg = '全线轻度溢价，无低吸机会——维持现有仓位即可，暂缓加仓';
 
     } else {
-      // 全部 neutral/caution
-      msg = '溢价区间 ' + pFmt(bottom.premium_pct) + '~' + pFmt(top.premium_pct)
-          + '，' + top.name + ' 溢价偏高，整体尚在可控范围';
+      msg = '各标的溢价接近零，定价合理，可按正常节奏布局跨境配置';
     }
 
     el.textContent = msg;
