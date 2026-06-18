@@ -902,6 +902,40 @@ body::before {
     });
   }
 
+  /* ── 南向资金卡片 ──────────────────────────────────────────── */
+  function renderSouthbound(sb) {
+    var grid = document.getElementById('etfGrid');
+    if (!grid || !sb) return;
+    var net = typeof sb.net_buy === 'number' ? sb.net_buy : 0;
+    var sign = net >= 0 ? '+' : '';
+    var valStr = sign + net.toFixed(2);
+    var isBuy = net > 0;
+    var cls = isBuy ? 'opp' : (net < -10 ? 'danger' : 'caution');
+    var badge = isBuy ? '↑ 南下买入' : '↓ 南下卖出';
+    var col = isBuy ? '#34C759' : '#FF3B30';
+    var spark = sparkline(199, isBuy ? 'up' : 'dn', col);
+
+    var card = document.createElement('article');
+    card.className = 'etf-card ' + cls;
+    card.setAttribute('aria-label', '南向资金净流入 ' + valStr + '亿');
+    card.innerHTML =
+      '<div class="etf-head">'
+      + '<div class="etf-meta-top">'
+      +   '<div class="etf-code">HSGT · Southbound</div>'
+      +   '<div class="etf-name">南向资金</div>'
+      + '</div>'
+      + '<div class="etf-badge">' + esc(badge) + '</div>'
+      + '</div>'
+      + '<div class="etf-rate-lbl">今日净买入 Net Flow</div>'
+      + '<div class="etf-rate">' + esc(valStr) + '<sup>亿</sup></div>'
+      + '<div class="etf-sub">'
+      + '<div class="etf-sub-item"><div class="etf-sub-lbl">方向</div><div class="etf-sub-val">' + (isBuy ? '买入' : '卖出') + '</div></div>'
+      + '<div class="etf-sub-item"><div class="etf-sub-lbl">更新</div><div class="etf-sub-val">' + esc((sb.updated || '').slice(11, 16) || '--') + '</div></div>'
+      + '</div>'
+      + '<div class="etf-spark">' + spark + '</div>';
+    grid.appendChild(card);
+  }
+
   /* ── A股状态 ─────────────────────────────────────────────── */
   function updateCN(isOpen) {
     var el  = document.getElementById('cnStatus');
@@ -953,6 +987,7 @@ body::before {
         var etfs = Array.isArray(payload.etfs) ? payload.etfs : [];
         if (etfs.length === 0) throw new Error('empty');
         renderETF(etfs);
+        renderSouthbound(payload.southbound);
         updateEditorSummary(etfs);
         updateCN(!!payload.is_market_open);
         setRibbon(
@@ -965,6 +1000,7 @@ body::before {
       .catch(function () {
         if (cachedETF && Array.isArray(cachedETF.etfs) && cachedETF.etfs.length) {
           renderETF(cachedETF.etfs);
+          renderSouthbound(cachedETF.southbound);
           updateEditorSummary(cachedETF.etfs);
           updateCN(!!cachedETF.is_market_open);
           setRibbon(
@@ -1045,6 +1081,7 @@ body::before {
       if (Array.isArray(_cp.etfs) && _cp.etfs.length) {
         cachedETF = _cp;
         renderETF(_cp.etfs);
+        renderSouthbound(_cp.southbound);
         updateEditorSummary(_cp.etfs);
         setRibbon(
           _cp.source_status === 'stale_fallback' ? 'stale' : 'live',

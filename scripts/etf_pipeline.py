@@ -273,10 +273,41 @@ def get_signal(premium_pct: float, thresholds: Dict) -> str:
 
 
 # ══════════════════════════════════════════════════════════════════════════════
+#  南向资金（港股通）净流入
+# ══════════════════════════════════════════════════════════════════════════════
+
+def fetch_southbound_flow() -> Optional[Dict]:
+    """获取今日南向资金（港股通沪+深）净买入额，单位亿元。"""
+    try:
+        import akshare as ak
+    except ImportError:
+        return None
+
+    try:
+        df = ak.stock_hsgt_fund_flow_summary_em()
+    except Exception as exc:
+        log.warning(f"南向资金数据获取失败: {exc}")
+        return None
+
+    south_rows = df[df["资金方向"] == "南向"]
+    if south_rows.empty:
+        log.warning("未找到南向资金数据")
+        return None
+
+    total_net = south_rows["成交净买额"].sum()
+    now_str = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=8))).strftime("%Y-%m-%d %H:%M:%S")
+
+    return {
+        "net_buy": round(float(total_net), 2),
+        "updated": now_str,
+    }
+
+
+# ══════════════════════════════════════════════════════════════════════════════
 #  JSON 输出
 # ══════════════════════════════════════════════════════════════════════════════
 
-def build_payload(data: List[Dict], thresholds: Dict) -> Dict:
+def build_payload(data: List[Dict], thresholds: Dict, southbound: Optional[Dict] = None) -> Dict:
     """构造前端所需的 JSON payload"""
     etfs = []
     for d in data:
@@ -286,7 +317,7 @@ def build_payload(data: List[Dict], thresholds: Dict) -> Dict:
         })
     now = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=8))).isoformat(timespec="seconds")
     updated_values = [str(d.get("updated", "")) for d in etfs if d.get("updated")]
-    return {
+    payload = {
         "generated_at": now,
         "checked_at": now,
         "data_updated_at": max(updated_values) if updated_values else now,
@@ -294,6 +325,9 @@ def build_payload(data: List[Dict], thresholds: Dict) -> Dict:
         "is_market_open": _is_cn_market_open(),
         "etfs": etfs,
     }
+    if southbound:
+        payload["southbound"] = southbound
+    return payload
 
 
 def write_json(payload: Dict, out_path: Path) -> None:
@@ -306,13 +340,13 @@ def write_json(payload: Dict, out_path: Path) -> None:
 
 
 def _is_cn_market_open() -> bool:
-    """粗略判断 A 股是否在交易时段（9:30–11:30 / 13:00–15:00，北京时间）"""
+    """判断 A 股是否在交易时段（含午间休盘 9:30–15:00，北京时间工作日）"""
     cst = datetime.timezone(datetime.timedelta(hours=8))
     now = datetime.datetime.now(cst)
-    if now.weekday() >= 5:  # 周六周日
+    if now.weekday() >= 5:
         return False
     t = now.hour * 60 + now.minute
-    return (570 <= t <= 690) or (780 <= t <= 900)  # 9:30–11:30 / 13:00–15:00
+    return 570 <= t <= 900  # 9:30–15:00（含午休）
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -430,8 +464,15 @@ def main() -> None:
         log.error("❌ 未获取到任何 ETF 数据，退出")
         sys.exit(1)
 
+    # 2b. 拉南向资金
+    southbound = fetch_southbound_flow()
+    if southbound:
+        log.info(f"  南向资金净买入: {southbound['net_buy']:+.2f} 亿")
+    else:
+        log.warning("  南向资金数据不可用，跳过")
+
     # 3. 构建 payload
-    payload = build_payload(data, thresholds)
+    payload = build_payload(data, thresholds, southbound=southbound)
 
     if args.dry_run:
         log.info("[DRY RUN] 结果预览 ↓")
