@@ -53,8 +53,7 @@ DEFAULT_CONFIG: Dict[str, Any] = {
     "etf_list": [
         {"code": "513100", "name": "纳指 ETF"},
         {"code": "513500", "name": "标普 ETF"},
-        {"code": "159509", "name": "纳指科技"},
-        {"code": "159941", "name": "纳指 ETF（广发）"},
+        {"code": "513180", "name": "恒生科技 ETF"},
         {"code": "513880", "name": "日经225 ETF"},
         {"code": "518880", "name": "黄金 ETF"},
     ],

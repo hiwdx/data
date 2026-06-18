@@ -34,6 +34,7 @@ DEFAULT_OUT = SCRIPT_DIR.parent / "public" / "macro-data.json"
 # ── 要采集的指标（Yahoo Finance 代码）──────────────────────────────────
 SYMBOLS = [
     {"ticker": "DX-Y.NYB", "key": "DXY",   "label": "美元指数",       "fmt": "price2"},
+    {"ticker": "CNY=X",   "key": "USDCNY", "label": "美元/人民币",    "fmt": "price4"},
     {"ticker": "^TNX",    "key": "US10Y",  "label": "美债10Y收益率",  "fmt": "pct"},
     {"ticker": "^VIX",    "key": "VIX",    "label": "恐慌指数",       "fmt": "price2"},
     {"ticker": "^NDX",    "key": "NDX",    "label": "纳斯达克100",    "fmt": "int"},
@@ -91,6 +92,8 @@ def fmt_value(price: float, fmt: str) -> str:
         return f"{int(price):,}"      # 19,842
     if fmt == "btc":
         return f"${int(price):,}"     # $67,420
+    if fmt == "price4":
+        return f"{price:.4f}"         # 7.2456
     return f"{price:.2f}"             # 104.23
 
 

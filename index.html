@@ -402,10 +402,10 @@ body::before {
   width: 100%;
 }
 @media (min-width: 560px) {
-  .macro-grid { grid-template-columns: repeat(5, 1fr); }
+  .macro-grid { grid-template-columns: repeat(3, 1fr); }
 }
-@media (max-width: 559px) {
-  .macro-grid .mc:nth-child(5) { grid-column: 1 / -1; }
+@media (min-width: 900px) {
+  .macro-grid { grid-template-columns: repeat(6, 1fr); }
 }
 
 .mc {
@@ -712,9 +712,11 @@ body::before {
 
   /* ── Mock 数据（pipeline 数据为空时的兜底）──────────────── */
   var ETF_MOCK = [
-    { code: '513100', name: '纳指 ETF',  index: 'Nasdaq 100', premium_pct:  7.2, signal: 'danger'  },
-    { code: '513500', name: '标普 ETF',  index: 'S&P 500',    premium_pct:  2.1, signal: 'caution' },
-    { code: '513520', name: '日经 ETF',  index: 'Nikkei 225', premium_pct: -1.8, signal: 'safe'    },
+    { code: '513100', name: '纳指 ETF',      index: 'Nasdaq 100', premium_pct:  7.2, signal: 'danger'  },
+    { code: '513500', name: '标普 ETF',      index: 'S&P 500',    premium_pct:  2.1, signal: 'caution' },
+    { code: '513180', name: '恒生科技 ETF',  index: 'HS Tech',    premium_pct:  1.5, signal: 'neutral' },
+    { code: '513880', name: '日经225 ETF',   index: 'Nikkei 225', premium_pct: -1.8, signal: 'safe'    },
+    { code: '518880', name: '黄金 ETF',      index: 'Gold',       premium_pct:  0.3, signal: 'neutral' },
   ];
 
   /* ── 信号映射（JSON signal → CSS class & 文案）─────────── */
