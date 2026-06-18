@@ -340,13 +340,13 @@ def write_json(payload: Dict, out_path: Path) -> None:
 
 
 def _is_cn_market_open() -> bool:
-    """判断 A 股是否在交易时段（含午间休盘 9:30–15:00，北京时间工作日）"""
+    """判断 A 股是否在交易时段（北京时间工作日 9:30–11:30、13:00–15:00）"""
     cst = datetime.timezone(datetime.timedelta(hours=8))
     now = datetime.datetime.now(cst)
     if now.weekday() >= 5:
         return False
     t = now.hour * 60 + now.minute
-    return 570 <= t <= 900  # 9:30–15:00（含午休）
+    return (570 <= t <= 690) or (780 <= t <= 900)
 
 
 # ══════════════════════════════════════════════════════════════════════════════

@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="跨境ETF溢价红绿灯 · 全球宏观锚点 · data.hiwd.com">
 <link rel="icon" href="/favicon.ico">
 <title>数据看板 | hiwd</title>
@@ -89,8 +89,9 @@ body::before {
 .hdr, main, footer { position: relative; z-index: 1; }
 
 /* ── Header status border — replaces ribbon ── */
-.hdr.is-live { border-bottom-color: rgba(14,200,122,.22); }
-.hdr.is-mock { border-bottom-color: rgba(245,166,35,.18); }
+.hdr.is-live  { border-bottom-color: rgba(14,200,122,.22); }
+.hdr.is-stale { border-bottom-color: rgba(245,166,35,.18); }
+.hdr.is-mock  { border-bottom-color: rgba(44,111,237,.22); }
 
 /* ============================================================
    STICKY HEADER
@@ -712,8 +713,8 @@ body::before {
 
   /* ── Mock 数据（pipeline 数据为空时的兜底）──────────────── */
   var ETF_MOCK = [
-    { code: '513100', name: '纳指 ETF',      index: 'Nasdaq 100', premium_pct:  7.2, signal: 'danger'  },
-    { code: '513500', name: '标普 ETF',      index: 'S&P 500',    premium_pct:  2.1, signal: 'caution' },
+    { code: '513100', name: '纳指 ETF',      index: 'Nasdaq 100', premium_pct: 12.2, signal: 'danger'  },
+    { code: '513500', name: '标普 ETF',      index: 'S&P 500',    premium_pct:  7.2, signal: 'caution' },
     { code: '513180', name: '恒生科技 ETF',  index: 'HS Tech',    premium_pct:  1.5, signal: 'neutral' },
     { code: '513880', name: '日经225 ETF',   index: 'Nikkei 225', premium_pct: -1.8, signal: 'safe'    },
     { code: '518880', name: '黄金 ETF',      index: 'Gold',       premium_pct:  0.3, signal: 'neutral' },
@@ -727,10 +728,10 @@ body::before {
     neutral: { cls: 'neutral', badge: '· 中性区间', sparkDir: 'flat' },
   };
 
-  /* premium_pct → signal（无 JSON signal 字段时的客户端推导） */
+  /* premium_pct → signal（与 etf_pipeline.py thresholds 一致：10 / 5 / 0） */
   function pctToSignal(pct) {
-    if (pct >  5) return 'danger';
-    if (pct >  2) return 'caution';
+    if (pct > 10) return 'danger';
+    if (pct >  5) return 'caution';
     if (pct <  0) return 'safe';
     return 'neutral';
   }
@@ -834,8 +835,10 @@ body::before {
           + (safe.length ? '；' + bottom.name + ' 接近净值，是相对合理的替代标的' : '，建议等溢价收窄后再考虑入场');
 
     } else if (danger.length === 1) {
-      msg = top.name + ' 溢价过重，追高得不偿失'
-          + (safe.length ? '；' + bottom.name + ' 折价，性价比更优' : '；其余标的溢价尚在合理区间，可正常参考');
+      var safeHint = safe.length >= 2
+        ? safe.slice(0, 2).map(function(e){ return e.name; }).join('、') + ' 折价，性价比更优'
+        : (safe.length === 1 ? safe[0].name + ' 折价，性价比更优' : '其余标的溢价尚在合理区间，可正常参考');
+      msg = top.name + ' 溢价过重，追高得不偿失；' + safeHint;
 
     } else if (safe.length >= 2) {
       var safeNames = safe.slice(0, 2).map(function(e){ return e.name; }).join('、');
@@ -912,12 +915,14 @@ body::before {
     var isBuy = net > 0;
     var cls = isBuy ? 'opp' : (net < -10 ? 'danger' : 'caution');
     var badge = isBuy ? '↑ 南下买入' : '↓ 南下卖出';
+    var flowLbl = isBuy ? '今日净买入 Net Flow' : '今日净流出 Net Flow';
+    var flowAria = isBuy ? '净流入' : '净流出';
     var col = isBuy ? '#34C759' : '#FF3B30';
     var spark = sparkline(199, isBuy ? 'up' : 'dn', col);
 
     var card = document.createElement('article');
     card.className = 'etf-card ' + cls;
-    card.setAttribute('aria-label', '南向资金净流入 ' + valStr + '亿');
+    card.setAttribute('aria-label', '南向资金' + flowAria + ' ' + valStr + '亿');
     card.innerHTML =
       '<div class="etf-head">'
       + '<div class="etf-meta-top">'
@@ -926,7 +931,7 @@ body::before {
       + '</div>'
       + '<div class="etf-badge">' + esc(badge) + '</div>'
       + '</div>'
-      + '<div class="etf-rate-lbl">今日净买入 Net Flow</div>'
+      + '<div class="etf-rate-lbl">' + esc(flowLbl) + '</div>'
       + '<div class="etf-rate">' + esc(valStr) + '<sup>亿</sup></div>'
       + '<div class="etf-sub">'
       + '<div class="etf-sub-item"><div class="etf-sub-lbl">方向</div><div class="etf-sub-val">' + (isBuy ? '买入' : '卖出') + '</div></div>'
@@ -950,6 +955,14 @@ body::before {
     }
   }
 
+  /* ── A股开市：优先用管道 is_market_open，否则本地时段判断 ── */
+  function resolveCNMarketOpen(payload) {
+    if (payload && typeof payload.is_market_open === 'boolean') {
+      return payload.is_market_open;
+    }
+    return isCNMarketOpen();
+  }
+
   /* ── Ribbon → Header border + ts 时间戳 ─────────────────── */
   function setRibbon(mode, genAt) {
     var hdr = document.querySelector('.hdr');
@@ -957,8 +970,8 @@ body::before {
     if (mode === 'live' || mode === 'stale') {
       isLive = true;
       if (hdr) {
-        hdr.classList.remove('is-live', 'is-mock');
-        hdr.classList.add(mode === 'live' ? 'is-live' : 'is-mock');
+        hdr.classList.remove('is-live', 'is-stale', 'is-mock');
+        hdr.classList.add(mode === 'live' ? 'is-live' : 'is-stale');
       }
       if (ts && genAt) {
         /* 管道输出的 ISO 字符串视为北京时间(UTC+8)解析。
@@ -971,7 +984,7 @@ body::before {
       }
     } else {
       isLive = false;
-      if (hdr) { hdr.classList.remove('is-live'); hdr.classList.add('is-mock'); }
+      if (hdr) { hdr.classList.remove('is-live', 'is-stale'); hdr.classList.add('is-mock'); }
       showLocalTime();
     }
   }
@@ -989,7 +1002,7 @@ body::before {
         renderETF(etfs);
         renderSouthbound(payload.southbound);
         updateEditorSummary(etfs);
-        updateCN(isCNMarketOpen());
+        updateCN(resolveCNMarketOpen(payload));
         setRibbon(
           payload.source_status === 'stale_fallback' ? 'stale' : 'live',
           payload.data_updated_at || payload.generated_at || ''
@@ -1002,7 +1015,7 @@ body::before {
           renderETF(cachedETF.etfs);
           renderSouthbound(cachedETF.southbound);
           updateEditorSummary(cachedETF.etfs);
-          updateCN(isCNMarketOpen());
+          updateCN(resolveCNMarketOpen(cachedETF));
           setRibbon(
             cachedETF.source_status === 'stale_fallback' ? 'stale' : 'live',
             cachedETF.data_updated_at || cachedETF.generated_at || ''
@@ -1041,6 +1054,7 @@ body::before {
   }
   function tick() {
     if (!isLive) showLocalTime();
+    updateCN(isCNMarketOpen());
     var ed  = document.getElementById('edDate');
     var bjt = toBJT(Date.now());
     if (ed) ed.textContent =
@@ -1056,13 +1070,13 @@ body::before {
       .replace(/"/g, '&quot;');
   }
 
-  /* ── A股市场开市判断（BJT = UTC+8，不依赖 pipeline）──── */
+  /* ── A股市场开市判断（BJT = UTC+8；午休 11:30–13:00 休市）── */
   function isCNMarketOpen() {
-    var bjt  = new Date(Date.now() + 8 * 3600000); // shift to UTC+8
-    var day  = bjt.getUTCDay();                     // 0=Sun … 6=Sat
+    var bjt  = new Date(Date.now() + 8 * 3600000);
+    var day  = bjt.getUTCDay();
     var min  = bjt.getUTCHours() * 60 + bjt.getUTCMinutes();
-    if (day === 0 || day === 6) return false;       // weekend
-    return min >= 570 && min <= 900;                // 9:30–15:00（含午休）
+    if (day === 0 || day === 6) return false;
+    return (min >= 570 && min <= 690) || (min >= 780 && min <= 900); // 9:30–11:30, 13:00–15:00
   }
 
   /* ── INIT ────────────────────────────────────────────────── */
@@ -1079,6 +1093,7 @@ body::before {
         renderETF(_cp.etfs);
         renderSouthbound(_cp.southbound);
         updateEditorSummary(_cp.etfs);
+        updateCN(resolveCNMarketOpen(_cp));
         setRibbon(
           _cp.source_status === 'stale_fallback' ? 'stale' : 'live',
           _cp.data_updated_at || _cp.generated_at || ''
