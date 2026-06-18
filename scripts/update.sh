@@ -1,39 +1,86 @@
 #!/bin/bash
-# Auto-update ETF + macro data and push to GitHub
-# Run via cron on macOS: every 15min during market hours
+# Fetch ETF + macro data, commit & push to GitHub (used by Actions + optional local cron)
+#
+# Local cron example (every 30 min on weekdays):
+#   5,35 9-15 * * 1-5  cd /path/to/data && bash scripts/update.sh >> .update.log 2>&1
 
-set -e
+set -euo pipefail
 
 REPO_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$REPO_DIR"
 
-PYTHON="/usr/bin/python3"
+PYTHON="${PYTHON:-python3}"
 LOG="$REPO_DIR/.update.log"
+USE_LOG=$([ -n "${GITHUB_ACTIONS:-}" ] && echo 0 || echo 1)
 
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] Running pipelines..." >> "$LOG"
+log() {
+  local msg="[$(date '+%Y-%m-%d %H:%M:%S')] $*"
+  echo "$msg"
+  if [ "$USE_LOG" = "1" ]; then
+    echo "$msg" >> "$LOG"
+  fi
+}
 
-git pull --rebase origin main >> "$LOG" 2>&1
+run_pipeline() {
+  set +e
+  if [ "$USE_LOG" = "1" ]; then
+    "$PYTHON" "$@" >> "$LOG" 2>&1
+  else
+    "$PYTHON" "$@"
+  fi
+  local rc=$?
+  set -e
+  return "$rc"
+}
 
-# ETF pipeline
-"$PYTHON" scripts/etf_pipeline.py --json-out public/etf-data.json >> "$LOG" 2>&1
+if [ "${SKIP_GIT_PULL:-0}" != "1" ]; then
+  log "Syncing main..."
+  git pull --rebase origin main
+fi
 
-# Macro pipeline
-"$PYTHON" scripts/macro_pipeline.py --json-out public/macro-data.json >> "$LOG" 2>&1
+ETF_OK=0
+MACRO_OK=0
 
-# Commit + push if anything changed
+log "Running ETF pipeline..."
+if run_pipeline scripts/etf_pipeline.py --json-out public/etf-data.json; then
+  ETF_OK=1
+else
+  log "ETF pipeline failed (exit $?)"
+fi
+
+log "Running macro pipeline..."
+if run_pipeline scripts/macro_pipeline.py --json-out public/macro-data.json; then
+  MACRO_OK=1
+else
+  log "Macro pipeline failed (exit $?)"
+fi
+
+if [ "$ETF_OK" = "0" ] && [ "$MACRO_OK" = "0" ]; then
+  log "Both pipelines failed — aborting"
+  exit 1
+fi
+
+log "Pipeline result: ETF=$ETF_OK MACRO=$MACRO_OK"
+
+git config user.name  "${GIT_AUTHOR_NAME:-github-actions[bot]}"
+git config user.email "${GIT_AUTHOR_EMAIL:-github-actions[bot]@users.noreply.github.com}"
+
 git add public/etf-data.json public/macro-data.json
 if git diff --staged --quiet; then
-    echo "[$(date '+%Y-%m-%d %H:%M:%S')] No changes, skip commit" >> "$LOG"
-else
-    git commit -m "data: update $(TZ='Asia/Shanghai' date '+%Y-%m-%d %H:%M') CST" >> "$LOG" 2>&1
-    for attempt in 1 2 3; do
-        if git push >> "$LOG" 2>&1; then
-            echo "[$(date '+%Y-%m-%d %H:%M:%S')] Pushed ✅" >> "$LOG"
-            exit 0
-        fi
-        echo "Push failed, rebasing (attempt ${attempt})" >> "$LOG"
-        git pull --rebase origin main >> "$LOG" 2>&1
-    done
-    echo "[$(date '+%Y-%m-%d %H:%M:%S')] Push failed after 3 attempts ❌" >> "$LOG"
-    exit 1
+  log "No file changes — skip commit"
+  exit 0
 fi
+
+git commit -m "data: update $(date -u +'%Y-%m-%d %H:%M UTC')"
+
+for attempt in 1 2 3; do
+  if git push origin HEAD:main; then
+    log "Pushed successfully"
+    exit 0
+  fi
+  log "Push failed, rebasing (attempt ${attempt})"
+  git pull --rebase origin main
+done
+
+log "Push failed after 3 attempts"
+exit 1

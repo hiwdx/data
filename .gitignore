@@ -31,6 +31,9 @@ credentials.json
 #   GitHub Actions commits the updated file so GitHub Pages can serve it.
 #   If running a dedicated server instead, add it back here.
 
+# ── Local update log ──────────────────────────────────────────────────────────
+.update.log
+
 # ── macOS ─────────────────────────────────────────────────────────────────────
 .DS_Store
 .AppleDouble
