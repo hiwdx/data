@@ -48,6 +48,7 @@ log = logging.getLogger("etf_pipeline")
 SCRIPT_DIR   = Path(__file__).resolve().parent
 CONFIG_FILE  = SCRIPT_DIR / "config.json"
 DEFAULT_OUT  = SCRIPT_DIR.parent / "public" / "etf-data.json"
+TRADE_DATES_CACHE_FILE = SCRIPT_DIR / "cn-trade-dates.json"
 
 # ── 内置默认配置（没有 config.json 时使用）─────────────────────────────────────
 DEFAULT_CONFIG: Dict[str, Any] = {
@@ -98,6 +99,19 @@ def _load_cn_trade_dates() -> Optional[Set[datetime.date]]:
     if _CN_TRADE_DATES_CACHE is not None:
         return _CN_TRADE_DATES_CACHE
 
+    if TRADE_DATES_CACHE_FILE.exists():
+        try:
+            payload = json.loads(TRADE_DATES_CACHE_FILE.read_text(encoding="utf-8"))
+            dates = {
+                datetime.date.fromisoformat(str(raw)[:10])
+                for raw in payload.get("trade_dates", [])
+            }
+            if dates:
+                _CN_TRADE_DATES_CACHE = dates
+                return dates
+        except Exception as exc:
+            log.warning(f"读取交易日历缓存失败，将尝试在线获取: {exc}")
+
     try:
         import akshare as ak
 
@@ -116,6 +130,20 @@ def _load_cn_trade_dates() -> Optional[Set[datetime.date]]:
                 dates.add(datetime.date.fromisoformat(str(raw)[:10]))
 
         _CN_TRADE_DATES_CACHE = dates
+        try:
+            TRADE_DATES_CACHE_FILE.write_text(
+                json.dumps(
+                    {
+                        "generated_at": datetime.datetime.now(BJT).isoformat(timespec="seconds"),
+                        "trade_dates": sorted(d.isoformat() for d in dates),
+                    },
+                    ensure_ascii=False,
+                    indent=2,
+                ),
+                encoding="utf-8",
+            )
+        except Exception as exc:
+            log.warning(f"写入交易日历缓存失败: {exc}")
         return dates
     except Exception as exc:
         log.warning(f"交易日历获取失败，回退到工作日判断: {exc}")

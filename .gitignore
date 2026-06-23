@@ -30,6 +30,7 @@ credentials.json
 # public/etf-data.json is intentionally NOT ignored:
 #   GitHub Actions commits the updated file so GitHub Pages can serve it.
 #   If running a dedicated server instead, add it back here.
+scripts/cn-trade-dates.json
 
 # ── Local update log ──────────────────────────────────────────────────────────
 .update.log
