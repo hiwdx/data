@@ -23,7 +23,7 @@ is_market_window() {
   local hm
   hm="$(TZ=Asia/Shanghai date +%H%M)"
   case "$hm" in
-    0930|1000|1030|1100|1130|1300|1330|1400|1430|1500) return 0 ;;
+    0930|1000|1030|1100|1130|1300|1330|1400|1430|1500|1620) return 0 ;;
     *) return 1 ;;
   esac
 }
