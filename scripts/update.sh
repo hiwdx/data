@@ -1,8 +1,11 @@
 #!/bin/bash
 # Fetch ETF + macro data, commit & push to GitHub (used by Actions + optional local cron)
 #
-# Local cron example (every 30 min on weekdays):
-#   5,35 9-15 * * 1-5  cd /path/to/data && bash scripts/update.sh >> .update.log 2>&1
+# Local cron example (A 股交易时段 on weekdays):
+#   30 9 * * 1-5  cd /path/to/data && bash scripts/update.sh >> .update.log 2>&1
+#   0,30 10-11 * * 1-5  cd /path/to/data && bash scripts/update.sh >> .update.log 2>&1
+#   0,30 13-14 * * 1-5  cd /path/to/data && bash scripts/update.sh >> .update.log 2>&1
+#   0 15 * * 1-5  cd /path/to/data && bash scripts/update.sh >> .update.log 2>&1
 
 set -euo pipefail
 

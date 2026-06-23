@@ -15,10 +15,11 @@ ETF 溢价率数据管道  —  data.hiwd.com  Module B
   python etf_pipeline.py --json-out /path/data.json # 指定输出路径
   python etf_pipeline.py --sheets                   # 同时写 Google Sheets
 
-定时任务（工作日 9:31–15:59，每 15 分钟）
-  15,30,45 9 * * 1-5   /path/venv/bin/python /path/etf_pipeline.py --json-out /var/www/etf-data.json
-  */15 10-14 * * 1-5   /path/venv/bin/python /path/etf_pipeline.py --json-out /var/www/etf-data.json
-  0,15,30 15 * * 1-5   /path/venv/bin/python /path/etf_pipeline.py --json-out /var/www/etf-data.json
+定时任务（工作日 A 股交易时段）
+  30 9 * * 1-5         /path/venv/bin/python /path/etf_pipeline.py --json-out /var/www/etf-data.json
+  0,30 10-11 * * 1-5   /path/venv/bin/python /path/etf_pipeline.py --json-out /var/www/etf-data.json
+  0,30 13-14 * * 1-5   /path/venv/bin/python /path/etf_pipeline.py --json-out /var/www/etf-data.json
+  0 15 * * 1-5         /path/venv/bin/python /path/etf_pipeline.py --json-out /var/www/etf-data.json
 
 依赖安装
   pip install -r requirements.txt
@@ -32,7 +33,7 @@ import json
 import logging
 import sys
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Set
 
 # ── Logging ────────────────────────────────────────────────────────────────────
 logging.basicConfig(
@@ -69,6 +70,9 @@ DEFAULT_CONFIG: Dict[str, Any] = {
     },
 }
 
+BJT = datetime.timezone(datetime.timedelta(hours=8))
+_CN_TRADE_DATES_CACHE: Optional[Set[datetime.date]] = None
+
 
 # ══════════════════════════════════════════════════════════════════════════════
 #  配置加载
@@ -86,6 +90,48 @@ def load_config() -> Dict[str, Any]:
     else:
         log.warning("config.json 不存在，使用内置默认配置（可复制 config.json.example 修改）")
     return DEFAULT_CONFIG
+
+
+def _load_cn_trade_dates() -> Optional[Set[datetime.date]]:
+    """加载 A 股交易日历；失败时返回 None，由上层回退到工作日判断。"""
+    global _CN_TRADE_DATES_CACHE
+    if _CN_TRADE_DATES_CACHE is not None:
+        return _CN_TRADE_DATES_CACHE
+
+    try:
+        import akshare as ak
+
+        df = ak.tool_trade_date_hist_sina()
+        if "trade_date" not in df.columns:
+            log.warning("交易日历缺少 trade_date 列，回退到工作日判断")
+            return None
+
+        dates: Set[datetime.date] = set()
+        for raw in df["trade_date"].dropna().tolist():
+            if isinstance(raw, datetime.datetime):
+                dates.add(raw.date())
+            elif isinstance(raw, datetime.date):
+                dates.add(raw)
+            else:
+                dates.add(datetime.date.fromisoformat(str(raw)[:10]))
+
+        _CN_TRADE_DATES_CACHE = dates
+        return dates
+    except Exception as exc:
+        log.warning(f"交易日历获取失败，回退到工作日判断: {exc}")
+        return None
+
+
+def _is_cn_trade_day(day: Optional[datetime.date] = None) -> bool:
+    """判断某天是否为 A 股交易日；优先使用交易日历，失败时回退到工作日。"""
+    target = day or datetime.datetime.now(BJT).date()
+    if target.weekday() >= 5:
+        return False
+
+    trade_dates = _load_cn_trade_dates()
+    if trade_dates is None:
+        return True
+    return target in trade_dates
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -340,10 +386,9 @@ def write_json(payload: Dict, out_path: Path) -> None:
 
 
 def _is_cn_market_open() -> bool:
-    """判断 A 股是否在交易时段（北京时间工作日 9:30–11:30、13:00–15:00）"""
-    cst = datetime.timezone(datetime.timedelta(hours=8))
-    now = datetime.datetime.now(cst)
-    if now.weekday() >= 5:
+    """判断 A 股是否在交易时段（北京时间交易日 9:30–11:30、13:00–15:00）"""
+    now = datetime.datetime.now(BJT)
+    if not _is_cn_trade_day(now.date()):
         return False
     t = now.hour * 60 + now.minute
     return (570 <= t <= 690) or (780 <= t <= 900)
