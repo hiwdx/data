@@ -1,58 +1,58 @@
 {
-  "generated_at": "2026-06-26T14:00:02+08:00",
-  "checked_at": "2026-06-26T14:00:02+08:00",
-  "data_updated_at": "2026-06-26 14:00:01",
+  "generated_at": "2026-06-26T14:00:30+08:00",
+  "checked_at": "2026-06-26T14:00:30+08:00",
+  "data_updated_at": "2026-06-26 14:00:30",
   "source_status": "live",
   "is_market_open": true,
   "etfs": [
     {
       "code": "513100",
       "name": "纳指 ETF",
-      "price": 2.158,
+      "price": 2.157,
       "iopv": 2.0036,
-      "premium_pct": 7.71,
-      "updated": "2026-06-26 14:00:01",
+      "premium_pct": 7.66,
+      "updated": "2026-06-26 14:00:30",
       "signal": "caution"
     },
     {
       "code": "513500",
       "name": "标普 ETF",
-      "price": 2.479,
+      "price": 2.48,
       "iopv": 2.3745,
-      "premium_pct": 4.4,
-      "updated": "2026-06-26 14:00:01",
+      "premium_pct": 4.44,
+      "updated": "2026-06-26 14:00:30",
       "signal": "neutral"
     },
     {
       "code": "513180",
       "name": "恒生科技 ETF",
-      "price": 0.543,
-      "iopv": 0.5445,
-      "premium_pct": -0.28,
-      "updated": "2026-06-26 14:00:01",
+      "price": 0.542,
+      "iopv": 0.5442,
+      "premium_pct": -0.4,
+      "updated": "2026-06-26 14:00:30",
       "signal": "safe"
     },
     {
       "code": "513880",
       "name": "日经225 ETF",
-      "price": 2.34,
-      "iopv": 2.1192,
-      "premium_pct": 10.42,
-      "updated": "2026-06-26 14:00:01",
+      "price": 2.338,
+      "iopv": 2.1186,
+      "premium_pct": 10.36,
+      "updated": "2026-06-26 14:00:30",
       "signal": "danger"
     },
     {
       "code": "518880",
       "name": "黄金 ETF",
-      "price": 8.341,
-      "iopv": 8.3496,
-      "premium_pct": -0.1,
-      "updated": "2026-06-26 14:00:01",
+      "price": 8.343,
+      "iopv": 8.345,
+      "premium_pct": -0.02,
+      "updated": "2026-06-26 14:00:30",
       "signal": "safe"
     }
   ],
   "southbound": {
-    "net_buy": 12.49,
-    "updated": "2026-06-26 14:00:02"
+    "net_buy": 12.66,
+    "updated": "2026-06-26 14:00:30"
   }
 }
