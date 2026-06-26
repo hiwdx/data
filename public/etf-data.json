@@ -1,58 +1,58 @@
 {
-  "generated_at": "2026-06-26T14:30:29+08:00",
-  "checked_at": "2026-06-26T14:30:29+08:00",
-  "data_updated_at": "2026-06-26 14:30:28",
+  "generated_at": "2026-06-26T15:00:30+08:00",
+  "checked_at": "2026-06-26T15:00:30+08:00",
+  "data_updated_at": "2026-06-26 15:00:30",
   "source_status": "live",
   "is_market_open": true,
   "etfs": [
     {
       "code": "513100",
       "name": "纳指 ETF",
-      "price": 2.16,
+      "price": 2.158,
       "iopv": 2.0036,
-      "premium_pct": 7.81,
-      "updated": "2026-06-26 14:30:28",
+      "premium_pct": 7.71,
+      "updated": "2026-06-26 15:00:30",
       "signal": "caution"
     },
     {
       "code": "513500",
       "name": "标普 ETF",
-      "price": 2.489,
+      "price": 2.482,
       "iopv": 2.3745,
-      "premium_pct": 4.82,
-      "updated": "2026-06-26 14:30:28",
+      "premium_pct": 4.53,
+      "updated": "2026-06-26 15:00:30",
       "signal": "neutral"
     },
     {
       "code": "513180",
       "name": "恒生科技 ETF",
-      "price": 0.539,
-      "iopv": 0.5412,
-      "premium_pct": -0.41,
-      "updated": "2026-06-26 14:30:28",
+      "price": 0.542,
+      "iopv": 0.5431,
+      "premium_pct": -0.2,
+      "updated": "2026-06-26 15:00:30",
       "signal": "safe"
     },
     {
       "code": "513880",
       "name": "日经225 ETF",
-      "price": 2.347,
+      "price": 2.353,
       "iopv": 2.1269,
-      "premium_pct": 10.35,
-      "updated": "2026-06-26 14:30:28",
+      "premium_pct": 10.63,
+      "updated": "2026-06-26 15:00:30",
       "signal": "danger"
     },
     {
       "code": "518880",
       "name": "黄金 ETF",
-      "price": 8.371,
-      "iopv": 8.3716,
-      "premium_pct": -0.01,
-      "updated": "2026-06-26 14:30:28",
+      "price": 8.39,
+      "iopv": 8.395,
+      "premium_pct": -0.06,
+      "updated": "2026-06-26 15:00:30",
       "signal": "safe"
     }
   ],
   "southbound": {
-    "net_buy": 12.52,
-    "updated": "2026-06-26 14:30:29"
+    "net_buy": 6.8,
+    "updated": "2026-06-26 15:00:30"
   }
 }
