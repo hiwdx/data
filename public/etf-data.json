@@ -1,58 +1,58 @@
 {
-  "generated_at": "2026-07-07T10:30:28+08:00",
-  "checked_at": "2026-07-07T10:30:28+08:00",
-  "data_updated_at": "2026-07-07 10:30:27",
+  "generated_at": "2026-07-07T11:00:26+08:00",
+  "checked_at": "2026-07-07T11:00:26+08:00",
+  "data_updated_at": "2026-07-07 11:00:25",
   "source_status": "live",
   "is_market_open": true,
   "etfs": [
     {
       "code": "513100",
       "name": "纳指 ETF",
-      "price": 2.168,
+      "price": 2.169,
       "iopv": 2.0166,
-      "premium_pct": 7.51,
-      "updated": "2026-07-07 10:30:27",
+      "premium_pct": 7.56,
+      "updated": "2026-07-07 11:00:25",
       "signal": "caution"
     },
     {
       "code": "513500",
       "name": "标普 ETF",
-      "price": 2.519,
+      "price": 2.518,
       "iopv": 2.426,
-      "premium_pct": 3.83,
-      "updated": "2026-07-07 10:30:27",
+      "premium_pct": 3.79,
+      "updated": "2026-07-07 11:00:25",
       "signal": "neutral"
     },
     {
       "code": "513180",
       "name": "恒生科技 ETF",
-      "price": 0.581,
-      "iopv": 0.5837,
-      "premium_pct": -0.46,
-      "updated": "2026-07-07 10:30:27",
+      "price": 0.578,
+      "iopv": 0.58,
+      "premium_pct": -0.34,
+      "updated": "2026-07-07 11:00:25",
       "signal": "safe"
     },
     {
       "code": "513880",
       "name": "日经225 ETF",
-      "price": 2.268,
+      "price": 2.274,
       "iopv": 2.1045,
-      "premium_pct": 7.77,
-      "updated": "2026-07-07 10:30:27",
+      "premium_pct": 8.05,
+      "updated": "2026-07-07 11:00:25",
       "signal": "caution"
     },
     {
       "code": "518880",
       "name": "黄金 ETF",
-      "price": 8.602,
-      "iopv": 8.6079,
-      "premium_pct": -0.07,
-      "updated": "2026-07-07 10:30:27",
-      "signal": "safe"
+      "price": 8.6,
+      "iopv": 8.591,
+      "premium_pct": 0.1,
+      "updated": "2026-07-07 11:00:25",
+      "signal": "neutral"
     }
   ],
   "southbound": {
-    "net_buy": 15.44,
-    "updated": "2026-07-07 10:30:28"
+    "net_buy": 24.24,
+    "updated": "2026-07-07 11:00:26"
   }
 }
