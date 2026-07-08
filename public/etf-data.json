@@ -1,58 +1,58 @@
 {
-  "generated_at": "2026-07-08T14:30:30+08:00",
-  "checked_at": "2026-07-08T14:30:30+08:00",
-  "data_updated_at": "2026-07-08 14:30:29",
+  "generated_at": "2026-07-08T15:00:31+08:00",
+  "checked_at": "2026-07-08T15:00:31+08:00",
+  "data_updated_at": "2026-07-08 15:00:30",
   "source_status": "live",
   "is_market_open": true,
   "etfs": [
     {
       "code": "513100",
       "name": "纳指 ETF",
-      "price": 2.146,
+      "price": 2.141,
       "iopv": 1.9803,
-      "premium_pct": 8.37,
-      "updated": "2026-07-08 14:30:29",
+      "premium_pct": 8.11,
+      "updated": "2026-07-08 15:00:30",
       "signal": "caution"
     },
     {
       "code": "513500",
       "name": "标普 ETF",
-      "price": 2.51,
+      "price": 2.503,
       "iopv": 2.4153,
-      "premium_pct": 3.92,
-      "updated": "2026-07-08 14:30:29",
+      "premium_pct": 3.63,
+      "updated": "2026-07-08 15:00:30",
       "signal": "neutral"
     },
     {
       "code": "513180",
       "name": "恒生科技 ETF",
-      "price": 0.606,
-      "iopv": 0.6075,
-      "premium_pct": -0.25,
-      "updated": "2026-07-08 14:30:29",
+      "price": 0.599,
+      "iopv": 0.6,
+      "premium_pct": -0.17,
+      "updated": "2026-07-08 15:00:30",
       "signal": "safe"
     },
     {
       "code": "513880",
       "name": "日经225 ETF",
-      "price": 2.219,
+      "price": 2.2,
       "iopv": 2.0451,
-      "premium_pct": 8.5,
-      "updated": "2026-07-08 14:30:29",
+      "premium_pct": 7.57,
+      "updated": "2026-07-08 15:00:30",
       "signal": "caution"
     },
     {
       "code": "518880",
       "name": "黄金 ETF",
-      "price": 8.6,
-      "iopv": 8.5987,
-      "premium_pct": 0.02,
-      "updated": "2026-07-08 14:30:29",
+      "price": 8.589,
+      "iopv": 8.5882,
+      "premium_pct": 0.01,
+      "updated": "2026-07-08 15:00:30",
       "signal": "neutral"
     }
   ],
   "southbound": {
-    "net_buy": 135.71,
-    "updated": "2026-07-08 14:30:30"
+    "net_buy": 135.44,
+    "updated": "2026-07-08 15:00:31"
   }
 }
