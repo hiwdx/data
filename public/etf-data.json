@@ -1,58 +1,58 @@
 {
-  "generated_at": "2026-07-09T13:54:42+08:00",
-  "checked_at": "2026-07-09T13:54:42+08:00",
-  "data_updated_at": "2026-07-09 13:54:41",
+  "generated_at": "2026-07-09T14:00:31+08:00",
+  "checked_at": "2026-07-09T14:00:31+08:00",
+  "data_updated_at": "2026-07-09 14:00:31",
   "source_status": "live",
   "is_market_open": true,
   "etfs": [
     {
       "code": "513100",
       "name": "纳指 ETF",
-      "price": 2.158,
+      "price": 2.159,
       "iopv": 1.9864,
-      "premium_pct": 8.64,
-      "updated": "2026-07-09 13:54:41",
+      "premium_pct": 8.69,
+      "updated": "2026-07-09 14:00:31",
       "signal": "caution"
     },
     {
       "code": "513500",
       "name": "标普 ETF",
-      "price": 2.508,
+      "price": 2.512,
       "iopv": 2.4091,
-      "premium_pct": 4.11,
-      "updated": "2026-07-09 13:54:41",
+      "premium_pct": 4.27,
+      "updated": "2026-07-09 14:00:31",
       "signal": "neutral"
     },
     {
       "code": "513180",
       "name": "恒生科技 ETF",
       "price": 0.599,
-      "iopv": 0.6018,
-      "premium_pct": -0.47,
-      "updated": "2026-07-09 13:54:41",
+      "iopv": 0.6024,
+      "premium_pct": -0.56,
+      "updated": "2026-07-09 14:00:31",
       "signal": "safe"
     },
     {
       "code": "513880",
       "name": "日经225 ETF",
-      "price": 2.207,
-      "iopv": 2.0724,
-      "premium_pct": 6.49,
-      "updated": "2026-07-09 13:54:41",
+      "price": 2.213,
+      "iopv": 2.0773,
+      "premium_pct": 6.53,
+      "updated": "2026-07-09 14:00:31",
       "signal": "caution"
     },
     {
       "code": "518880",
       "name": "黄金 ETF",
-      "price": 8.494,
-      "iopv": 8.4908,
-      "premium_pct": 0.04,
-      "updated": "2026-07-09 13:54:41",
+      "price": 8.508,
+      "iopv": 8.5037,
+      "premium_pct": 0.05,
+      "updated": "2026-07-09 14:00:31",
       "signal": "neutral"
     }
   ],
   "southbound": {
-    "net_buy": 115.36,
-    "updated": "2026-07-09 13:54:42"
+    "net_buy": 114.02,
+    "updated": "2026-07-09 14:00:31"
   }
 }
