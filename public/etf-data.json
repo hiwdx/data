@@ -1,58 +1,58 @@
 {
-  "generated_at": "2026-07-13T14:00:32+08:00",
-  "checked_at": "2026-07-13T14:00:32+08:00",
-  "data_updated_at": "2026-07-13 14:00:32",
+  "generated_at": "2026-07-13T14:30:36+08:00",
+  "checked_at": "2026-07-13T14:30:36+08:00",
+  "data_updated_at": "2026-07-13 14:30:35",
   "source_status": "live",
   "is_market_open": true,
   "etfs": [
     {
       "code": "513100",
       "name": "纳指 ETF",
-      "price": 2.173,
+      "price": 2.169,
       "iopv": 2.0225,
-      "premium_pct": 7.44,
-      "updated": "2026-07-13 14:00:32",
+      "premium_pct": 7.24,
+      "updated": "2026-07-13 14:30:35",
       "signal": "caution"
     },
     {
       "code": "513500",
       "name": "标普 ETF",
-      "price": 2.519,
+      "price": 2.517,
       "iopv": 2.4362,
-      "premium_pct": 3.4,
-      "updated": "2026-07-13 14:00:32",
+      "premium_pct": 3.32,
+      "updated": "2026-07-13 14:30:35",
       "signal": "neutral"
     },
     {
       "code": "513180",
       "name": "恒生科技 ETF",
-      "price": 0.596,
-      "iopv": 0.5968,
-      "premium_pct": -0.13,
-      "updated": "2026-07-13 14:00:32",
+      "price": 0.592,
+      "iopv": 0.5921,
+      "premium_pct": -0.02,
+      "updated": "2026-07-13 14:30:35",
       "signal": "safe"
     },
     {
       "code": "513880",
       "name": "日经225 ETF",
-      "price": 2.162,
-      "iopv": 2.054,
-      "premium_pct": 5.26,
-      "updated": "2026-07-13 14:00:32",
+      "price": 2.156,
+      "iopv": 2.0516,
+      "premium_pct": 5.09,
+      "updated": "2026-07-13 14:30:35",
       "signal": "caution"
     },
     {
       "code": "518880",
       "name": "黄金 ETF",
-      "price": 8.435,
-      "iopv": 8.4303,
-      "premium_pct": 0.06,
-      "updated": "2026-07-13 14:00:32",
+      "price": 8.441,
+      "iopv": 8.4353,
+      "premium_pct": 0.07,
+      "updated": "2026-07-13 14:30:35",
       "signal": "neutral"
     }
   ],
   "southbound": {
-    "net_buy": 75.84,
-    "updated": "2026-07-13 14:00:32"
+    "net_buy": 78.2,
+    "updated": "2026-07-13 14:30:36"
   }
 }
