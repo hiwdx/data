@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-07-14T15:00:29+08:00",
-  "checked_at": "2026-07-14T15:00:29+08:00",
-  "data_updated_at": "2026-07-14 15:00:29",
+  "generated_at": "2026-07-14T15:00:37+08:00",
+  "checked_at": "2026-07-14T15:00:37+08:00",
+  "data_updated_at": "2026-07-14 15:00:37",
   "source_status": "live",
   "is_market_open": true,
   "etfs": [
@@ -11,7 +11,7 @@
       "price": 2.17,
       "iopv": 1.9838,
       "premium_pct": 9.39,
-      "updated": "2026-07-14 15:00:29",
+      "updated": "2026-07-14 15:00:37",
       "signal": "caution"
     },
     {
@@ -20,7 +20,7 @@
       "price": 2.54,
       "iopv": 2.4167,
       "premium_pct": 5.1,
-      "updated": "2026-07-14 15:00:29",
+      "updated": "2026-07-14 15:00:37",
       "signal": "caution"
     },
     {
@@ -29,7 +29,7 @@
       "price": 0.595,
       "iopv": 0.5957,
       "premium_pct": -0.12,
-      "updated": "2026-07-14 15:00:29",
+      "updated": "2026-07-14 15:00:37",
       "signal": "safe"
     },
     {
@@ -38,21 +38,21 @@
       "price": 2.15,
       "iopv": 2.0634,
       "premium_pct": 4.2,
-      "updated": "2026-07-14 15:00:29",
+      "updated": "2026-07-14 15:00:37",
       "signal": "neutral"
     },
     {
       "code": "518880",
       "name": "黄金 ETF",
       "price": 8.373,
-      "iopv": 8.366,
-      "premium_pct": 0.08,
-      "updated": "2026-07-14 15:00:29",
+      "iopv": 8.369,
+      "premium_pct": 0.05,
+      "updated": "2026-07-14 15:00:37",
       "signal": "neutral"
     }
   ],
   "southbound": {
     "net_buy": 82.87,
-    "updated": "2026-07-14 15:00:29"
+    "updated": "2026-07-14 15:00:37"
   }
 }
