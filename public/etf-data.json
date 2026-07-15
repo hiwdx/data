@@ -1,58 +1,58 @@
 {
-  "generated_at": "2026-07-15T12:38:34+08:00",
-  "checked_at": "2026-07-15T12:38:34+08:00",
-  "data_updated_at": "2026-07-15 12:38:33",
+  "generated_at": "2026-07-15T13:00:26+08:00",
+  "checked_at": "2026-07-15T13:00:26+08:00",
+  "data_updated_at": "2026-07-15 13:00:26",
   "source_status": "live",
-  "is_market_open": false,
+  "is_market_open": true,
   "etfs": [
     {
       "code": "513100",
       "name": "纳指 ETF",
-      "price": 2.182,
+      "price": 2.184,
       "iopv": 2.0064,
-      "premium_pct": 8.75,
-      "updated": "2026-07-15 12:38:33",
+      "premium_pct": 8.85,
+      "updated": "2026-07-15 13:00:26",
       "signal": "caution"
     },
     {
       "code": "513500",
       "name": "标普 ETF",
-      "price": 2.548,
+      "price": 2.549,
       "iopv": 2.4258,
-      "premium_pct": 5.04,
-      "updated": "2026-07-15 12:38:33",
+      "premium_pct": 5.08,
+      "updated": "2026-07-15 13:00:26",
       "signal": "caution"
     },
     {
       "code": "513180",
       "name": "恒生科技 ETF",
       "price": 0.601,
-      "iopv": 0.6021,
-      "premium_pct": -0.18,
-      "updated": "2026-07-15 12:38:33",
+      "iopv": 0.6024,
+      "premium_pct": -0.23,
+      "updated": "2026-07-15 13:00:26",
       "signal": "safe"
     },
     {
       "code": "513880",
       "name": "日经225 ETF",
-      "price": 2.17,
-      "iopv": 2.0895,
-      "premium_pct": 3.85,
-      "updated": "2026-07-15 12:38:33",
+      "price": 2.175,
+      "iopv": 2.091,
+      "premium_pct": 4.02,
+      "updated": "2026-07-15 13:00:26",
       "signal": "neutral"
     },
     {
       "code": "518880",
       "name": "黄金 ETF",
-      "price": 8.37,
-      "iopv": 8.3798,
-      "premium_pct": -0.12,
-      "updated": "2026-07-15 12:38:33",
+      "price": 8.373,
+      "iopv": 8.3786,
+      "premium_pct": -0.07,
+      "updated": "2026-07-15 13:00:26",
       "signal": "safe"
     }
   ],
   "southbound": {
     "net_buy": 93.84,
-    "updated": "2026-07-15 12:38:34"
+    "updated": "2026-07-15 13:00:26"
   }
 }
