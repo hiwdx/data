@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-07-17T12:39:25+08:00",
-  "checked_at": "2026-07-17T12:39:25+08:00",
-  "data_updated_at": "2026-07-17 12:39:24",
+  "generated_at": "2026-07-17T12:52:30+08:00",
+  "checked_at": "2026-07-17T12:52:30+08:00",
+  "data_updated_at": "2026-07-17 12:52:29",
   "source_status": "live",
   "is_market_open": false,
   "etfs": [
@@ -11,7 +11,7 @@
       "price": 2.124,
       "iopv": 1.9657,
       "premium_pct": 8.05,
-      "updated": "2026-07-17 12:39:24",
+      "updated": "2026-07-17 12:52:29",
       "signal": "caution"
     },
     {
@@ -20,7 +20,7 @@
       "price": 2.538,
       "iopv": 2.4203,
       "premium_pct": 4.86,
-      "updated": "2026-07-17 12:39:24",
+      "updated": "2026-07-17 12:52:29",
       "signal": "neutral"
     },
     {
@@ -29,30 +29,30 @@
       "price": 0.59,
       "iopv": 0.5892,
       "premium_pct": 0.14,
-      "updated": "2026-07-17 12:39:24",
+      "updated": "2026-07-17 12:52:29",
       "signal": "neutral"
     },
     {
       "code": "513880",
       "name": "日经225 ETF",
       "price": 2.038,
-      "iopv": 1.9146,
-      "premium_pct": 6.45,
-      "updated": "2026-07-17 12:39:24",
+      "iopv": 1.9258,
+      "premium_pct": 5.83,
+      "updated": "2026-07-17 12:52:29",
       "signal": "caution"
     },
     {
       "code": "518880",
       "name": "黄金 ETF",
       "price": 8.31,
-      "iopv": 8.271,
-      "premium_pct": 0.47,
-      "updated": "2026-07-17 12:39:24",
+      "iopv": 8.2799,
+      "premium_pct": 0.36,
+      "updated": "2026-07-17 12:52:29",
       "signal": "neutral"
     }
   ],
   "southbound": {
     "net_buy": 9.72,
-    "updated": "2026-07-17 12:39:25"
+    "updated": "2026-07-17 12:52:30"
   }
 }
