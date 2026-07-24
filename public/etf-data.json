@@ -1,58 +1,58 @@
 {
-  "generated_at": "2026-07-24T12:58:56+08:00",
-  "checked_at": "2026-07-24T12:58:56+08:00",
-  "data_updated_at": "2026-07-24 12:58:55",
+  "generated_at": "2026-07-24T15:23:29+08:00",
+  "checked_at": "2026-07-24T15:23:29+08:00",
+  "data_updated_at": "2026-07-24 15:23:28",
   "source_status": "live",
   "is_market_open": false,
   "etfs": [
     {
       "code": "513100",
       "name": "纳指 ETF",
-      "price": 2.103,
+      "price": 2.104,
       "iopv": 1.9266,
-      "premium_pct": 9.16,
-      "updated": "2026-07-24 12:58:55",
+      "premium_pct": 9.21,
+      "updated": "2026-07-24 15:23:28",
       "signal": "caution"
     },
     {
       "code": "513500",
       "name": "标普 ETF",
-      "price": 2.504,
+      "price": 2.506,
       "iopv": 2.3798,
-      "premium_pct": 5.22,
-      "updated": "2026-07-24 12:58:55",
+      "premium_pct": 5.3,
+      "updated": "2026-07-24 15:23:28",
       "signal": "caution"
     },
     {
       "code": "513180",
       "name": "恒生科技 ETF",
-      "price": 0.586,
-      "iopv": 0.5863,
-      "premium_pct": -0.05,
-      "updated": "2026-07-24 12:58:55",
+      "price": 0.585,
+      "iopv": 0.5871,
+      "premium_pct": -0.36,
+      "updated": "2026-07-24 15:23:28",
       "signal": "safe"
     },
     {
       "code": "513880",
       "name": "日经225 ETF",
-      "price": 2.033,
-      "iopv": 1.9458,
-      "premium_pct": 4.48,
-      "updated": "2026-07-24 12:58:55",
+      "price": 2.038,
+      "iopv": 1.9502,
+      "premium_pct": 4.5,
+      "updated": "2026-07-24 15:23:28",
       "signal": "neutral"
     },
     {
       "code": "518880",
       "name": "黄金 ETF",
-      "price": 8.374,
-      "iopv": 8.3658,
-      "premium_pct": 0.1,
-      "updated": "2026-07-24 12:58:55",
-      "signal": "neutral"
+      "price": 8.385,
+      "iopv": 8.4013,
+      "premium_pct": -0.19,
+      "updated": "2026-07-24 15:23:28",
+      "signal": "safe"
     }
   ],
   "southbound": {
-    "net_buy": 5.3,
-    "updated": "2026-07-24 12:58:56"
+    "net_buy": -7.95,
+    "updated": "2026-07-24 15:23:29"
   }
 }
