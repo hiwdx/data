@@ -1,58 +1,58 @@
 {
-  "generated_at": "2026-07-29T12:57:24+08:00",
-  "checked_at": "2026-07-29T12:57:24+08:00",
-  "data_updated_at": "2026-07-29 12:57:23",
+  "generated_at": "2026-07-29T15:34:36+08:00",
+  "checked_at": "2026-07-29T15:34:36+08:00",
+  "data_updated_at": "2026-07-29 15:34:35",
   "source_status": "live",
   "is_market_open": false,
   "etfs": [
     {
       "code": "513100",
       "name": "纳指 ETF",
-      "price": 2.062,
+      "price": 2.074,
       "iopv": 1.8804,
-      "premium_pct": 9.66,
-      "updated": "2026-07-29 12:57:23",
-      "signal": "caution"
+      "premium_pct": 10.3,
+      "updated": "2026-07-29 15:34:35",
+      "signal": "danger"
     },
     {
       "code": "513500",
       "name": "标普 ETF",
-      "price": 2.505,
+      "price": 2.511,
       "iopv": 2.3848,
-      "premium_pct": 5.04,
-      "updated": "2026-07-29 12:57:23",
+      "premium_pct": 5.29,
+      "updated": "2026-07-29 15:34:35",
       "signal": "caution"
     },
     {
       "code": "513180",
       "name": "恒生科技 ETF",
-      "price": 0.614,
-      "iopv": 0.6131,
-      "premium_pct": 0.15,
-      "updated": "2026-07-29 12:57:23",
-      "signal": "neutral"
+      "price": 0.615,
+      "iopv": 0.6158,
+      "premium_pct": -0.13,
+      "updated": "2026-07-29 15:34:35",
+      "signal": "safe"
     },
     {
       "code": "513880",
       "name": "日经225 ETF",
-      "price": 1.93,
-      "iopv": 1.842,
-      "premium_pct": 4.78,
-      "updated": "2026-07-29 12:57:23",
-      "signal": "neutral"
+      "price": 1.961,
+      "iopv": 1.8552,
+      "premium_pct": 5.7,
+      "updated": "2026-07-29 15:34:35",
+      "signal": "caution"
     },
     {
       "code": "518880",
       "name": "黄金 ETF",
-      "price": 8.364,
-      "iopv": 8.3625,
-      "premium_pct": 0.02,
-      "updated": "2026-07-29 12:57:23",
-      "signal": "neutral"
+      "price": 8.392,
+      "iopv": 8.3958,
+      "premium_pct": -0.05,
+      "updated": "2026-07-29 15:34:35",
+      "signal": "safe"
     }
   ],
   "southbound": {
-    "net_buy": -44.76,
-    "updated": "2026-07-29 12:57:24"
+    "net_buy": -52.58,
+    "updated": "2026-07-29 15:34:36"
   }
 }
