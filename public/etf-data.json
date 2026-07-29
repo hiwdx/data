@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-07-29T12:44:27+08:00",
-  "checked_at": "2026-07-29T12:44:27+08:00",
-  "data_updated_at": "2026-07-29 12:44:26",
+  "generated_at": "2026-07-29T12:57:24+08:00",
+  "checked_at": "2026-07-29T12:57:24+08:00",
+  "data_updated_at": "2026-07-29 12:57:23",
   "source_status": "live",
   "is_market_open": false,
   "etfs": [
@@ -11,7 +11,7 @@
       "price": 2.062,
       "iopv": 1.8804,
       "premium_pct": 9.66,
-      "updated": "2026-07-29 12:44:26",
+      "updated": "2026-07-29 12:57:23",
       "signal": "caution"
     },
     {
@@ -20,7 +20,7 @@
       "price": 2.505,
       "iopv": 2.3848,
       "premium_pct": 5.04,
-      "updated": "2026-07-29 12:44:26",
+      "updated": "2026-07-29 12:57:23",
       "signal": "caution"
     },
     {
@@ -29,17 +29,17 @@
       "price": 0.614,
       "iopv": 0.6131,
       "premium_pct": 0.15,
-      "updated": "2026-07-29 12:44:26",
+      "updated": "2026-07-29 12:57:23",
       "signal": "neutral"
     },
     {
       "code": "513880",
       "name": "日经225 ETF",
       "price": 1.93,
-      "iopv": 1.824,
-      "premium_pct": 5.81,
-      "updated": "2026-07-29 12:44:26",
-      "signal": "caution"
+      "iopv": 1.842,
+      "premium_pct": 4.78,
+      "updated": "2026-07-29 12:57:23",
+      "signal": "neutral"
     },
     {
       "code": "518880",
@@ -47,12 +47,12 @@
       "price": 8.364,
       "iopv": 8.3625,
       "premium_pct": 0.02,
-      "updated": "2026-07-29 12:44:26",
+      "updated": "2026-07-29 12:57:23",
       "signal": "neutral"
     }
   ],
   "southbound": {
     "net_buy": -44.76,
-    "updated": "2026-07-29 12:44:27"
+    "updated": "2026-07-29 12:57:24"
   }
 }
