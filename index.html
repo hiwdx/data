@@ -117,7 +117,7 @@ body::before {
 .logo {
   display: flex;
   align-items: center;
-  gap: .38rem;
+  gap: .7rem;
   text-decoration: none;
   white-space: nowrap;
   user-select: none;
@@ -147,21 +147,15 @@ body::before {
   border-radius: 50%;
   background: #00C2B3;
 }
-/* thin vertical rule between wordmark and product name */
+/* Kept for backwards-compatible markup; the product name needs no divider. */
 .logo-rule {
-  width: 1px;
-  height: 1.1em;
-  background: rgba(255,255,255,.16);
-  margin: 0 .22rem;
-  flex-shrink: 0;
-  align-self: center;
+  display: none;
 }
 .logo-sub {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-  font-size: .66rem;
-  font-weight: 600;
-  letter-spacing: .13em;
-  text-transform: uppercase;
+  font-family: var(--font-ui);
+  font-size: .78rem;
+  font-weight: 500;
+  letter-spacing: .04em;
   color: var(--t2);
 }
 
@@ -221,7 +215,7 @@ body::before {
 @media (max-width: 560px) {
   .hdr { padding: .82rem 1rem; }
   .logo-hiwd { font-size: 1.3rem; }
-  .logo-sub { font-size: .58rem; letter-spacing: .1em; }
+  .logo-sub { font-size: .7rem; letter-spacing: .02em; }
   .ts { font-size: .58rem; }
   .data-ts, .cn-status { font-size: .55rem; }
   .hdr-meta {
@@ -642,8 +636,7 @@ body::before {
 <header class="hdr">
   <a href="https://hiwd.com" class="logo">
     <span class="logo-hiwd">h<span class="logo-i">ı</span>wd</span>
-    <span class="logo-rule"></span>
-  <span class="logo-sub">data / 数据看板</span>
+    <span class="logo-sub">数据看板</span>
   </a>
   <div class="hdr-right">
     <span class="ts" id="ts">—</span>
