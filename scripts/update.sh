@@ -58,6 +58,28 @@ EOF
   GIT_EDITOR=true git rebase --continue
 }
 
+recover_automated_runner() {
+  # A dedicated scheduler checkout must never spend days retrying the same
+  # generated-JSON rebase conflict.  It contains no hand-authored work: the
+  # next pipeline run recreates these files from source.
+  if [ "${AUTOMATED_RUNNER:-0}" != "1" ]; then
+    return 0
+  fi
+
+  if [ -d .git/rebase-merge ] || [ -d .git/rebase-apply ]; then
+    log "Discarding interrupted automated rebase"
+    git rebase --abort || true
+  fi
+
+  if [ -n "$(git diff --name-only --diff-filter=U)" ]; then
+    log "Automated runner still has unresolved conflicts; restoring origin/main"
+    git fetch origin main
+    git reset --hard origin/main
+  fi
+}
+
+recover_automated_runner
+
 if [ "${SKIP_GIT_PULL:-0}" != "1" ]; then
   log "Syncing main..."
   git pull --rebase origin main

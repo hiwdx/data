@@ -8,11 +8,19 @@
   <key>ProgramArguments</key>
   <array>
     <string>/bin/bash</string>
-    <string>/Users/andrew/.hiwd-data-runner/scripts/run_if_market_time.sh</string>
+    <string>/Users/andrew/Documents/data/scripts/run_if_market_time.sh</string>
   </array>
 
   <key>WorkingDirectory</key>
-  <string>/Users/andrew/.hiwd-data-runner</string>
+  <string>/Users/andrew/Documents/data</string>
+
+  <!-- This is the dedicated scheduled job; generated JSON conflicts can be
+       safely discarded and recreated on its next successful run. -->
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>AUTOMATED_RUNNER</key>
+    <string>1</string>
+  </dict>
 
   <key>RunAtLoad</key>
   <true/>
@@ -81,8 +89,8 @@
   </array>
 
   <key>StandardOutPath</key>
-  <string>/Users/andrew/.hiwd-data-runner/.update.log</string>
+  <string>/Users/andrew/Documents/data/.update.log</string>
   <key>StandardErrorPath</key>
-  <string>/Users/andrew/.hiwd-data-runner/.update.log</string>
+  <string>/Users/andrew/Documents/data/.update.log</string>
 </dict>
 </plist>
