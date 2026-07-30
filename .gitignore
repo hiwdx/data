@@ -25,6 +25,8 @@ credentials.json
 .env
 .env.*
 !.env.example
+.dev.vars
+.wrangler/
 
 # ── Generated data ────────────────────────────────────────────────────────────
 # public/etf-data.json and scripts/cn-trade-dates.json are intentionally NOT ignored:

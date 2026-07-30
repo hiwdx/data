@@ -3,9 +3,8 @@ name: 📊 Update All Data
 # ──────────────────────────────────────────────────────────────────────────────
 # ETF 溢价 + 宏观指标 → public/*.json → commit → GitHub Pages 自动刷新
 #
-# 调度说明（GitHub cron 为 UTC）：
-#   GitHub 在整点与半点容易出现排队甚至漏掉计划任务。所有触发点避开
-#   00 / 30 分钟，仍保持每 30 分钟一次的盘中节奏：
+# 调度说明：Cloudflare Worker Cron 是主调度器；GitHub cron 保留作兜底。
+#   所有触发点避开整点与半点，仍保持每 30 分钟一次的盘中节奏：
 #   BJT 09:27 / 10:02 / 10:32 / 11:02 / 11:32 /
 #       13:02 / 13:32 / 14:02 / 14:32 / 15:02 / 16:17
 #   实际执行前仍按 A 股交易日历判定，避免节假日 / 调休误跑。
@@ -63,7 +62,6 @@ jobs:
         run: pip install -r scripts/requirements.txt
 
       - name: Check CN Trading Day
-        if: github.event_name == 'schedule'
         id: cn_trade_day
         run: |
           if python - <<'PY'
@@ -82,11 +80,11 @@ jobs:
           fi
 
       - name: Skip Non-Trading Day
-        if: github.event_name == 'schedule' && steps.cn_trade_day.outputs.is_trade_day != 'true'
+        if: steps.cn_trade_day.outputs.is_trade_day != 'true'
         run: echo 'CN market closed today, skip scheduled update.'
 
       - name: Fetch, commit & push
-        if: github.event_name != 'schedule' || steps.cn_trade_day.outputs.is_trade_day == 'true'
+        if: steps.cn_trade_day.outputs.is_trade_day == 'true'
         env:
           PYTHON: python
           SKIP_GIT_PULL: '1'
