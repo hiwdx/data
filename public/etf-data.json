@@ -1,58 +1,58 @@
 {
-  "generated_at": "2026-08-12T16:53:38+08:00",
-  "checked_at": "2026-08-12T16:53:38+08:00",
-  "data_updated_at": "2026-08-12 16:53:37",
+  "generated_at": "2026-08-13T13:24:18+08:00",
+  "checked_at": "2026-08-13T13:24:18+08:00",
+  "data_updated_at": "2026-08-13 13:24:14",
   "source_status": "live",
-  "is_market_open": false,
+  "is_market_open": true,
   "etfs": [
     {
       "code": "513100",
       "name": "纳指 ETF",
-      "price": 2.226,
-      "iopv": 1.9986,
-      "premium_pct": 11.38,
-      "updated": "2026-08-12 16:53:37",
+      "price": 2.24,
+      "iopv": 2.0124,
+      "premium_pct": 11.31,
+      "updated": "2026-08-13 13:24:14",
       "signal": "danger"
     },
     {
       "code": "513500",
       "name": "标普 ETF",
-      "price": 2.698,
-      "iopv": 2.4799,
-      "premium_pct": 8.79,
-      "updated": "2026-08-12 16:53:37",
+      "price": 2.723,
+      "iopv": 2.4855,
+      "premium_pct": 9.56,
+      "updated": "2026-08-13 13:24:14",
       "signal": "caution"
     },
     {
       "code": "513180",
       "name": "恒生科技 ETF",
-      "price": 0.604,
-      "iopv": 0.603,
-      "premium_pct": 0.17,
-      "updated": "2026-08-12 16:53:37",
-      "signal": "neutral"
+      "price": 0.61,
+      "iopv": 0.6112,
+      "premium_pct": -0.2,
+      "updated": "2026-08-13 13:24:14",
+      "signal": "safe"
     },
     {
       "code": "513880",
       "name": "日经225 ETF",
-      "price": 2.183,
-      "iopv": 2.0903,
-      "premium_pct": 4.43,
-      "updated": "2026-08-12 16:53:37",
+      "price": 2.215,
+      "iopv": 2.1216,
+      "premium_pct": 4.4,
+      "updated": "2026-08-13 13:24:14",
       "signal": "neutral"
     },
     {
       "code": "518880",
       "name": "黄金 ETF",
-      "price": 9.103,
-      "iopv": 9.1014,
-      "premium_pct": 0.02,
-      "updated": "2026-08-12 16:53:37",
+      "price": 9.08,
+      "iopv": 9.0791,
+      "premium_pct": 0.01,
+      "updated": "2026-08-13 13:24:14",
       "signal": "neutral"
     }
   ],
   "southbound": {
-    "net_buy": -29.06,
-    "updated": "2026-08-12 16:53:38"
+    "net_buy": 56.21,
+    "updated": "2026-08-13 13:24:18"
   }
 }
