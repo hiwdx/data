@@ -1,17 +1,17 @@
 {
-  "generated_at": "2026-08-19T12:22:26+08:00",
-  "checked_at": "2026-08-19T12:22:26+08:00",
-  "data_updated_at": "2026-08-19 12:22:26",
+  "generated_at": "2026-08-19T16:16:45+08:00",
+  "checked_at": "2026-08-19T16:16:45+08:00",
+  "data_updated_at": "2026-08-19 16:16:44",
   "source_status": "live",
   "is_market_open": false,
   "etfs": [
     {
       "code": "513100",
       "name": "纳指 ETF",
-      "price": 2.196,
+      "price": 2.2,
       "iopv": 1.9961,
-      "premium_pct": 10.01,
-      "updated": "2026-08-19 12:22:26",
+      "premium_pct": 10.21,
+      "updated": "2026-08-19 16:16:44",
       "signal": "danger"
     },
     {
@@ -20,39 +20,39 @@
       "price": 2.642,
       "iopv": 2.469,
       "premium_pct": 7.01,
-      "updated": "2026-08-19 12:22:26",
+      "updated": "2026-08-19 16:16:44",
       "signal": "caution"
     },
     {
       "code": "513180",
       "name": "恒生科技 ETF",
-      "price": 0.592,
-      "iopv": 0.594,
-      "premium_pct": -0.34,
-      "updated": "2026-08-19 12:22:26",
+      "price": 0.59,
+      "iopv": 0.5913,
+      "premium_pct": -0.22,
+      "updated": "2026-08-19 16:16:44",
       "signal": "safe"
     },
     {
       "code": "513880",
       "name": "日经225 ETF",
-      "price": 2.123,
-      "iopv": 2.0215,
-      "premium_pct": 5.02,
-      "updated": "2026-08-19 12:22:26",
-      "signal": "caution"
+      "price": 2.117,
+      "iopv": 2.0203,
+      "premium_pct": 4.79,
+      "updated": "2026-08-19 16:16:44",
+      "signal": "neutral"
     },
     {
       "code": "518880",
       "name": "黄金 ETF",
-      "price": 8.997,
-      "iopv": 8.9884,
-      "premium_pct": 0.1,
-      "updated": "2026-08-19 12:22:26",
-      "signal": "neutral"
+      "price": 8.974,
+      "iopv": 8.9907,
+      "premium_pct": -0.19,
+      "updated": "2026-08-19 16:16:44",
+      "signal": "safe"
     }
   ],
   "southbound": {
-    "net_buy": -12.99,
-    "updated": "2026-08-19 12:22:26"
+    "net_buy": -106.21,
+    "updated": "2026-08-19 16:16:45"
   }
 }
