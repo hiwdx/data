@@ -1,58 +1,58 @@
 {
-  "generated_at": "2026-09-18T16:30:51+08:00",
-  "checked_at": "2026-09-18T16:30:51+08:00",
-  "data_updated_at": "2026-09-18 16:30:50",
+  "generated_at": "2026-09-21T17:19:01+08:00",
+  "checked_at": "2026-09-21T17:19:01+08:00",
+  "data_updated_at": "2026-09-21 17:19:00",
   "source_status": "live",
   "is_market_open": false,
   "etfs": [
     {
       "code": "513100",
       "name": "纳指 ETF",
-      "price": 2.269,
-      "iopv": 1.9839,
-      "premium_pct": 14.37,
-      "updated": "2026-09-18 16:30:50",
+      "price": 2.283,
+      "iopv": 1.9952,
+      "premium_pct": 14.42,
+      "updated": "2026-09-21 17:19:00",
       "signal": "danger"
     },
     {
       "code": "513500",
       "name": "标普 ETF",
-      "price": 2.685,
-      "iopv": 2.442,
-      "premium_pct": 9.95,
-      "updated": "2026-09-18 16:30:50",
+      "price": 2.688,
+      "iopv": 2.4444,
+      "premium_pct": 9.97,
+      "updated": "2026-09-21 17:19:00",
       "signal": "caution"
     },
     {
       "code": "513180",
       "name": "恒生科技 ETF",
-      "price": 0.553,
-      "iopv": 0.5528,
-      "premium_pct": 0.04,
-      "updated": "2026-09-18 16:30:50",
-      "signal": "neutral"
+      "price": 0.554,
+      "iopv": 0.5541,
+      "premium_pct": -0.02,
+      "updated": "2026-09-21 17:19:00",
+      "signal": "safe"
     },
     {
       "code": "513880",
       "name": "日经225 ETF",
       "price": 2.125,
-      "iopv": 2.0459,
-      "premium_pct": 3.87,
-      "updated": "2026-09-18 16:30:50",
+      "iopv": 2.0328,
+      "premium_pct": 4.54,
+      "updated": "2026-09-21 17:19:00",
       "signal": "neutral"
     },
     {
       "code": "518880",
       "name": "黄金 ETF",
-      "price": 9.009,
-      "iopv": 9.0143,
-      "premium_pct": -0.06,
-      "updated": "2026-09-18 16:30:50",
-      "signal": "safe"
+      "price": 8.93,
+      "iopv": 8.9181,
+      "premium_pct": 0.13,
+      "updated": "2026-09-21 17:19:00",
+      "signal": "neutral"
     }
   ],
   "southbound": {
-    "net_buy": 11.93,
-    "updated": "2026-09-18 16:30:51"
+    "net_buy": 40.74,
+    "updated": "2026-09-21 17:19:01"
   }
 }
