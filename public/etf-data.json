@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-09-23T16:50:32+08:00",
-  "checked_at": "2026-09-23T16:50:32+08:00",
+  "generated_at": "2026-09-24T16:45:56+08:00",
+  "checked_at": "2026-09-24T16:45:56+08:00",
   "data_updated_at": "2026-09-21 17:19:00",
   "source_status": "stale_fallback",
   "is_market_open": false,
@@ -12,7 +12,7 @@
       "iopv": 1.9952,
       "premium_pct": 14.42,
       "updated": "2026-09-21 17:19:00",
-      "checked_at": "2026-09-23 16:50:31",
+      "checked_at": "2026-09-24 16:45:55",
       "stale": true,
       "signal": "danger"
     },
@@ -23,7 +23,7 @@
       "iopv": 2.4444,
       "premium_pct": 9.97,
       "updated": "2026-09-21 17:19:00",
-      "checked_at": "2026-09-23 16:50:31",
+      "checked_at": "2026-09-24 16:45:55",
       "stale": true,
       "signal": "caution"
     },
@@ -34,7 +34,7 @@
       "iopv": 0.5541,
       "premium_pct": -0.02,
       "updated": "2026-09-21 17:19:00",
-      "checked_at": "2026-09-23 16:50:31",
+      "checked_at": "2026-09-24 16:45:55",
       "stale": true,
       "signal": "safe"
     },
@@ -45,7 +45,7 @@
       "iopv": 2.0328,
       "premium_pct": 4.54,
       "updated": "2026-09-21 17:19:00",
-      "checked_at": "2026-09-23 16:50:31",
+      "checked_at": "2026-09-24 16:45:55",
       "stale": true,
       "signal": "neutral"
     },
@@ -56,13 +56,13 @@
       "iopv": 8.9181,
       "premium_pct": 0.13,
       "updated": "2026-09-21 17:19:00",
-      "checked_at": "2026-09-23 16:50:31",
+      "checked_at": "2026-09-24 16:45:55",
       "stale": true,
       "signal": "neutral"
     }
   ],
   "southbound": {
-    "net_buy": 34.49,
-    "updated": "2026-09-23 16:50:32"
+    "net_buy": 29.0,
+    "updated": "2026-09-24 16:45:56"
   }
 }
