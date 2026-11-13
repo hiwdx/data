@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-11-12T19:52:35+08:00",
-  "checked_at": "2026-11-12T19:52:35+08:00",
+  "generated_at": "2026-11-13T19:35:55+08:00",
+  "checked_at": "2026-11-13T19:35:55+08:00",
   "data_updated_at": "2026-11-10 19:49:00",
   "source_status": "stale_fallback",
   "is_market_open": false,
@@ -12,7 +12,7 @@
       "iopv": 1.8682,
       "premium_pct": 18.3,
       "updated": "2026-11-10 19:49:00",
-      "checked_at": "2026-11-12 19:52:34",
+      "checked_at": "2026-11-13 19:35:54",
       "stale": true,
       "signal": "danger"
     },
@@ -23,7 +23,7 @@
       "iopv": 2.3984,
       "premium_pct": 10.57,
       "updated": "2026-11-10 19:49:00",
-      "checked_at": "2026-11-12 19:52:34",
+      "checked_at": "2026-11-13 19:35:54",
       "stale": true,
       "signal": "danger"
     },
@@ -34,7 +34,7 @@
       "iopv": 0.5095,
       "premium_pct": 0.1,
       "updated": "2026-11-10 19:49:00",
-      "checked_at": "2026-11-12 19:52:34",
+      "checked_at": "2026-11-13 19:35:54",
       "stale": true,
       "signal": "neutral"
     },
@@ -45,7 +45,7 @@
       "iopv": 1.8738,
       "premium_pct": 4.44,
       "updated": "2026-11-10 19:49:00",
-      "checked_at": "2026-11-12 19:52:34",
+      "checked_at": "2026-11-13 19:35:54",
       "stale": true,
       "signal": "neutral"
     },
@@ -56,13 +56,13 @@
       "iopv": 8.3959,
       "premium_pct": 0.03,
       "updated": "2026-11-10 19:49:00",
-      "checked_at": "2026-11-12 19:52:34",
+      "checked_at": "2026-11-13 19:35:54",
       "stale": true,
       "signal": "neutral"
     }
   ],
   "southbound": {
-    "net_buy": 58.46,
-    "updated": "2026-11-12 19:52:35"
+    "net_buy": 23.33,
+    "updated": "2026-11-13 19:35:55"
   }
 }
