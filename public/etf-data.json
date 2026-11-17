@@ -1,68 +1,58 @@
 {
-  "generated_at": "2026-11-16T20:04:05+08:00",
-  "checked_at": "2026-11-16T20:04:05+08:00",
-  "data_updated_at": "2026-11-10 19:49:00",
-  "source_status": "stale_fallback",
+  "generated_at": "2026-11-17T20:29:55+08:00",
+  "checked_at": "2026-11-17T20:29:55+08:00",
+  "data_updated_at": "2026-11-17 20:29:52",
+  "source_status": "live",
   "is_market_open": false,
   "etfs": [
     {
       "code": "513100",
       "name": "纳指 ETF",
-      "price": 2.21,
-      "iopv": 1.8682,
-      "premium_pct": 18.3,
-      "updated": "2026-11-10 19:49:00",
-      "checked_at": "2026-11-16 20:04:05",
-      "stale": true,
+      "price": 2.166,
+      "iopv": 1.818,
+      "premium_pct": 19.14,
+      "updated": "2026-11-17 20:29:52",
       "signal": "danger"
     },
     {
       "code": "513500",
       "name": "标普 ETF",
-      "price": 2.652,
-      "iopv": 2.3984,
-      "premium_pct": 10.57,
-      "updated": "2026-11-10 19:49:00",
-      "checked_at": "2026-11-16 20:04:05",
-      "stale": true,
-      "signal": "danger"
+      "price": 2.573,
+      "iopv": 2.3554,
+      "premium_pct": 9.24,
+      "updated": "2026-11-17 20:29:52",
+      "signal": "caution"
     },
     {
       "code": "513180",
       "name": "恒生科技 ETF",
-      "price": 0.51,
-      "iopv": 0.5095,
-      "premium_pct": 0.1,
-      "updated": "2026-11-10 19:49:00",
-      "checked_at": "2026-11-16 20:04:05",
-      "stale": true,
+      "price": 0.472,
+      "iopv": 0.4698,
+      "premium_pct": 0.47,
+      "updated": "2026-11-17 20:29:52",
       "signal": "neutral"
     },
     {
       "code": "513880",
       "name": "日经225 ETF",
-      "price": 1.957,
-      "iopv": 1.8738,
-      "premium_pct": 4.44,
-      "updated": "2026-11-10 19:49:00",
-      "checked_at": "2026-11-16 20:04:05",
-      "stale": true,
+      "price": 1.903,
+      "iopv": 1.8204,
+      "premium_pct": 4.54,
+      "updated": "2026-11-17 20:29:52",
       "signal": "neutral"
     },
     {
       "code": "518880",
       "name": "黄金 ETF",
-      "price": 8.398,
-      "iopv": 8.3959,
-      "premium_pct": 0.03,
-      "updated": "2026-11-10 19:49:00",
-      "checked_at": "2026-11-16 20:04:05",
-      "stale": true,
-      "signal": "neutral"
+      "price": 7.897,
+      "iopv": 7.9115,
+      "premium_pct": -0.18,
+      "updated": "2026-11-17 20:29:52",
+      "signal": "safe"
     }
   ],
   "southbound": {
-    "net_buy": -42.27,
-    "updated": "2026-11-16 20:04:05"
+    "net_buy": 22.04,
+    "updated": "2026-11-17 20:29:55"
   }
 }
